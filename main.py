@@ -1,5 +1,6 @@
 from pygame.locals import *
 import pygame
+import M
 
 class Player:
     def __init__(self):
@@ -89,7 +90,6 @@ class Maze:
            pygame.draw.rect(background, (255, 128, 0), self.guards[i])
 
        screen.blit(background,(0, 0))
-
 
 class App:
     windowWidth = 800
@@ -183,4 +183,8 @@ class App:
 
 if __name__ == "__main__" :
     theApp = App()
-    theApp.on_execute()
+    M.wait_for_continue(
+        fill_func = M.show_start_screen, 
+        continue_func = theApp.on_execute,
+        fill_args = [M.screen, M.background], 
+        continue_args = [])
