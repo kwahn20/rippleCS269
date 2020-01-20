@@ -1,5 +1,6 @@
 import pygame
 import sys
+import sounds
 from pygame.locals import *
 
 START_SCREEN = 'mainscreen.png'
@@ -25,6 +26,7 @@ def new_game_clicked():
     # 151,389 is top left (of new game button)
     # 254, 441 is bottom right (of new game buttom)
     if leftclick and x in range(151, 254) and y in range(389, 441):
+        sounds.button_press_2.play()
         return True
     else:
         return False
