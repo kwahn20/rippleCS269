@@ -1,6 +1,6 @@
-from pygame.locals import *
 import pygame
 import M
+from pygame.locals import *
 
 class Player:
     def __init__(self):
@@ -103,13 +103,14 @@ class App:
         return False
 
     def __init__(self):
+        pygame.init()
+        pygame.mixer.init()
         self._running = True
         self.player = Player()
         self.maze = Maze()
 
     def on_init(self):
-        pygame.init()
-
+        
         self.window = (800,600)
         self.screen = pygame.display.set_mode(self.window)
 
@@ -150,6 +151,9 @@ class App:
         if self.on_init() == False:
             self._running = False
 
+        # quit the music while the main game is going
+        pygame.mixer.music.stop()
+
         while( self._running ):
             pygame.event.pump()
             keys = pygame.key.get_pressed()
@@ -184,7 +188,10 @@ class App:
 if __name__ == "__main__" :
     theApp = App()
     M.wait_for_continue(
-        fill_func = M.show_start_screen, 
+        waitscreen_func = M.show_start_screen, 
+        waitscreen_args = [M.screen, M.background],
         continue_func = theApp.on_execute,
-        fill_args = [M.screen, M.background], 
-        continue_args = [])
+        continue_args = [],
+        trigger_func = M.new_game_clicked,
+        trigger_args = []
+        )
