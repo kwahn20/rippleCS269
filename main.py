@@ -104,7 +104,7 @@ class App:
 
     def __init__(self):
         pygame.init()
-        pygame.mixer.init()
+        pygame.mixer.init() # this is for sounds
         self._running = True
         self.player = Player()
         self.maze = Maze()
@@ -187,11 +187,12 @@ class App:
 
 if __name__ == "__main__" :
     theApp = App()
-    M.wait_for_continue(
-        waitscreen_func = M.show_start_screen, 
+
+    M.wait_for_continues(
+        waitscreen_func = M.show_start_screen,
         waitscreen_args = [M.screen, M.background],
-        continue_func = theApp.on_execute,
-        continue_args = [],
-        trigger_func = M.new_game_clicked,
-        trigger_args = []
-        )
+        function_relationships = [
+            (M.new_game_clicked, [], theApp.on_execute, []),
+            (M.high_scores_clicked, [], M.show_highscores, [])
+        ]
+    )

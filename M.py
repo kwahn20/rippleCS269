@@ -1,10 +1,13 @@
 import pygame
 import sys
 import sounds
+import time
 from pygame.locals import *
 
 START_SCREEN = 'mainscreen.png'
 
+# a class for background images such as the start screen, or any other images
+# that we want in the background (like a background for the game or whatnot)
 class Background(pygame.sprite.Sprite):
     def __init__(self, file):
         pygame.sprite.Sprite.__init__(self)
@@ -12,35 +15,47 @@ class Background(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.left, self.rect.top = [0,0]
 
+# displays the start screen and starts the music
 def show_start_screen(screen, background_img):
+    # draw the start screen
     screen.fill((0,0,0))
     screen.blit(background_img.image, background_img.rect)
     pygame.display.flip()
+
+    # load the music for the start screen and play on loop
     pygame.mixer.music.load('track1.wav')
     pygame.mixer.music.play(-1)
 
-def new_game_clicked():
-    leftclick, *rest = pygame.mouse.get_pressed()
-    x, y = pygame.mouse.get_pos()
+def show_highscores():
+    print('highscores was clicked')
 
-    # 151,389 is top left (of new game button)
-    # 254, 441 is bottom right (of new game buttom)
-    if leftclick and x in range(151, 254) and y in range(389, 441):
-        sounds.button_press_2.play()
-        return True
-    else:
-        return False
+def make_button_click_trigger(x_range, y_range):
+    def f():
+        leftclick, *rest = pygame.mouse.get_pressed()
+        x, y = pygame.mouse.get_pos()
 
-def wait_for_continue(waitscreen_func, waitscreen_args,
-    continue_func, continue_args,
-    trigger_func, trigger_args):
+        if leftclick and x in range(*x_range) and y in range (*y_range):
+            sounds.button_press_2.play()
+            return True
+        else:
+            return False
+    return f
+
+# the ranges define where the new game button is
+new_game_clicked = make_button_click_trigger(x_range = (151, 254), y_range = (389, 441))
+# the ranges define where the high scores button is
+high_scores_clicked = make_button_click_trigger(x_range = (256, 360), y_range = (391, 439))
+
+def wait_for_continues(waitscreen_func, waitscreen_args, function_relationships):
     waitscreen_func(*waitscreen_args)
-
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT: sys.exit()
-
-        if trigger_func(*trigger_args): continue_func(*continue_args)
+        for trigger_func, t_args, continue_func, c_args in function_relationships:
+            if trigger_func(*t_args): continue_func(*c_args)
+        time.sleep(0.1)
+        # for debugging:
+        # print(pygame.mouse.get_pos())
 
 screen = pygame.display.set_mode(size = (1000, 563))
 background = Background(START_SCREEN)
