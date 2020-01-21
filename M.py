@@ -29,22 +29,36 @@ def show_start_screen(screen, background_img):
 def show_highscores():
     print('highscores was clicked')
 
+def show_controls():
+    print('controls was clicked')
+
+def show_tutorial():
+    print('tutorial clicked')
+
+def show_options():
+    print('options clicked')
+
+def show_credits():
+    print('credits clicked')
+
 def make_button_click_trigger(x_range, y_range):
     def f():
         leftclick, *rest = pygame.mouse.get_pressed()
         x, y = pygame.mouse.get_pos()
-
-        if leftclick and x in range(*x_range) and y in range (*y_range):
+        if leftclick and x in range(*x_range) and y in range(*y_range):
             sounds.button_press_2.play()
             return True
         else:
             return False
     return f
 
-# the ranges define where the new game button is
-new_game_clicked = make_button_click_trigger(x_range = (151, 254), y_range = (389, 441))
-# the ranges define where the high scores button is
-high_scores_clicked = make_button_click_trigger(x_range = (256, 360), y_range = (391, 439))
+# the ranges define where on the screen the button is
+new_game_clicked    = make_button_click_trigger(x_range = (151, 254), y_range = (392, 441))
+high_scores_clicked = make_button_click_trigger(x_range = (256, 360), y_range = (392, 441))
+controls_clicked    = make_button_click_trigger(x_range = (361, 446), y_range = (392, 441))
+tutorial_clicked    = make_button_click_trigger(x_range = (468, 574), y_range = (392, 441))
+options_clicked     = make_button_click_trigger(x_range = (574, 678), y_range = (392, 441))
+credits_clicked     = make_button_click_trigger(x_range = (681, 801), y_range = (392, 441))
 
 def wait_for_continues(waitscreen_func, waitscreen_args, function_relationships):
     waitscreen_func(*waitscreen_args)
@@ -55,7 +69,7 @@ def wait_for_continues(waitscreen_func, waitscreen_args, function_relationships)
             if trigger_func(*t_args): continue_func(*c_args)
         time.sleep(0.1)
         # for debugging:
-        # print(pygame.mouse.get_pos())
+        print(pygame.mouse.get_pos())
 
 screen = pygame.display.set_mode(size = (1000, 563))
 background = Background(START_SCREEN)
