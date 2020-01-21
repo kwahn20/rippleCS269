@@ -42,14 +42,14 @@ def show_credits():
     print('credits clicked')
 
 def make_button_click_trigger(x_range, y_range):
-    def f():
-        leftclick, *rest = pygame.mouse.get_pressed()
-        x, y = pygame.mouse.get_pos()
-        if leftclick and x in range(*x_range) and y in range(*y_range):
-            sounds.button_press_2.play()
-            return True
-        else:
-            return False
+    def f(events):
+        for event in events:
+            if event.type == pygame.MOUSEBUTTONUP:
+                x, y = pygame.mouse.get_pos()
+                if x in range(*x_range) and y in range(*y_range):
+                    sounds.button_press_2.play()
+                    return True
+        return False
     return f
 
 # the ranges define where on the screen the button is
@@ -63,13 +63,9 @@ credits_clicked     = make_button_click_trigger(x_range = (681, 801), y_range = 
 def wait_for_continues(waitscreen_func, waitscreen_args, function_relationships):
     waitscreen_func(*waitscreen_args)
     while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT: sys.exit()
+        events = pygame.event.get()
         for trigger_func, t_args, continue_func, c_args in function_relationships:
-            if trigger_func(*t_args): continue_func(*c_args)
-        time.sleep(0.1)
-        # for debugging:
-        print(pygame.mouse.get_pos())
+            if trigger_func(events = events, *t_args): continue_func(*c_args)
 
 screen = pygame.display.set_mode(size = (1000, 563))
 background = Background(START_SCREEN)

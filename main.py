@@ -110,7 +110,6 @@ class App:
         self.maze = Maze()
 
     def on_init(self):
-        
         self.window = (800,600)
         self.screen = pygame.display.set_mode(self.window)
 
