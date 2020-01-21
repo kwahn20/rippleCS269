@@ -10,28 +10,40 @@ class Player:
         self.rect = pygame.Rect(self.x,self.y, 44, 44)
         self.speed = 1
 
-        # temporary implementation
+        # fields for temporary implementation of step sound
         self.which_step = 1
         self.sound_interval = 1
 
+    def play_steps(self):
+        if self.sound_interval % 12 == 0:
+            if self.which_step % 2 == 1:
+                sounds.step_1_set_1.play()
+                print('played step 1')
+                self.which_step += 1
+            else:
+                sounds.step_2_set_1.play()
+                print('played step 2')
+                self.which_step += 1
+        self.sound_interval += 1
+
     def moveRight(self):
         self.x = self.x + self.speed
-        M.play_steps(self)
+        self.play_steps()
         self.rect = pygame.Rect(self.x,self.y, 44, 44)
 
     def moveLeft(self):
         self.x = self.x - self.speed
-        M.play_steps(self)
+        self.play_steps()
         self.rect = pygame.Rect(self.x,self.y, 44, 44)
 
     def moveUp(self):
         self.y = self.y - self.speed
-        M.play_steps(self)
+        self.play_steps()
         self.rect = pygame.Rect(self.x,self.y, 44, 44)
 
     def moveDown(self):
         self.y = self.y + self.speed
-        M.play_steps(self)
+        self.play_steps()
         self.rect = pygame.Rect(self.x,self.y, 44, 44)
 
 # for now this is almost the same as the Player class

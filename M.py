@@ -15,17 +15,18 @@ class Background(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.left, self.rect.top = [0,0]
 
-def play_steps(player):
-    if player.sound_interval % 12 == 0:
-        if player.which_step % 2 == 1:
-            sounds.step_1_set_1.play()
-            print('played step 1')
-            player.which_step += 1
-        else:
-            sounds.step_2_set_1.play()
-            print('played step 2')
-            player.which_step += 1
-    player.sound_interval += 1
+# # player must have which_steps field and sound_interval field
+# def play_steps(player):
+#     if player.sound_interval % 12 == 0:
+#         if player.which_step % 2 == 1:
+#             sounds.step_1_set_1.play()
+#             print('played step 1')
+#             player.which_step += 1
+#         else:
+#             sounds.step_2_set_1.play()
+#             print('played step 2')
+#             player.which_step += 1
+#     player.sound_interval += 1
 
 # displays the start screen and starts the music
 def show_start_screen(screen, background_img):
