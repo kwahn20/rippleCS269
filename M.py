@@ -15,6 +15,18 @@ class Background(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.left, self.rect.top = [0,0]
 
+def play_steps(player):
+    if player.sound_interval % 12 == 0:
+        if player.which_step % 2 == 1:
+            sounds.step_1_set_1.play()
+            print('played step 1')
+            player.which_step += 1
+        else:
+            sounds.step_2_set_1.play()
+            print('played step 2')
+            player.which_step += 1
+    player.sound_interval += 1
+
 # displays the start screen and starts the music
 def show_start_screen(screen, background_img):
     # draw the start screen
@@ -63,7 +75,8 @@ def wait_for_continues(waitscreen_func, waitscreen_args, function_relationships)
         for trigger_func, continue_func in function_relationships:
             if trigger_func(events = events): continue_func()
 
-# the ranges define where on the screen the button is. These are a bunch of 'trigger' functions
+# the ranges define where on the screen the button is.
+# These are a bunch of 'trigger' functions
 new_game_clicked    = make_button_click_trigger(x_range = (151, 254), y_range = (392, 441))
 high_scores_clicked = make_button_click_trigger(x_range = (256, 360), y_range = (392, 441))
 controls_clicked    = make_button_click_trigger(x_range = (361, 446), y_range = (392, 441))

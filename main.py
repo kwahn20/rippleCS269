@@ -1,4 +1,5 @@
 import pygame
+import sounds
 import M
 from pygame.locals import *
 
@@ -9,20 +10,28 @@ class Player:
         self.rect = pygame.Rect(self.x,self.y, 44, 44)
         self.speed = 1
 
+        # temporary implementation
+        self.which_step = 1
+        self.sound_interval = 1
+
     def moveRight(self):
         self.x = self.x + self.speed
+        M.play_steps(self)
         self.rect = pygame.Rect(self.x,self.y, 44, 44)
 
     def moveLeft(self):
         self.x = self.x - self.speed
+        M.play_steps(self)
         self.rect = pygame.Rect(self.x,self.y, 44, 44)
 
     def moveUp(self):
         self.y = self.y - self.speed
+        M.play_steps(self)
         self.rect = pygame.Rect(self.x,self.y, 44, 44)
 
     def moveDown(self):
         self.y = self.y + self.speed
+        M.play_steps(self)
         self.rect = pygame.Rect(self.x,self.y, 44, 44)
 
 # for now this is almost the same as the Player class
@@ -186,7 +195,7 @@ class App:
 
 if __name__ == "__main__" :
     theApp = App()
-    
+
     M.wait_for_continues(
         waitscreen_func = M.show_start_screen,
         waitscreen_args = [M.screen, M.background],
