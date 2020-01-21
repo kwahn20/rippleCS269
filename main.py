@@ -186,16 +186,16 @@ class App:
 
 if __name__ == "__main__" :
     theApp = App()
-
+    
     M.wait_for_continues(
         waitscreen_func = M.show_start_screen,
         waitscreen_args = [M.screen, M.background],
         function_relationships = [
-            (M.new_game_clicked, [], theApp.on_execute, []),
-            (M.high_scores_clicked, [], M.show_highscores, []),
-            (M.controls_clicked, [], M.show_controls, []),
-            (M.tutorial_clicked, [], M.show_tutorial, []),
-            (M.options_clicked, [], M.show_options, []),
-            (M.credits_clicked, [], M.show_credits, [])
+            (M.new_game_clicked, theApp.on_execute),
+            (M.high_scores_clicked, M.show_highscores),
+            (M.controls_clicked, M.show_controls),
+            (M.tutorial_clicked, M.show_tutorial),
+            (M.options_clicked, M.show_options),
+            (M.credits_clicked, M.show_credits)
         ]
     )

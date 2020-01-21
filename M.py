@@ -41,6 +41,7 @@ def show_options():
 def show_credits():
     print('credits clicked')
 
+# make a 'trigger' function for a button located in the given x and y range
 def make_button_click_trigger(x_range, y_range):
     def f(events):
         for event in events:
@@ -52,20 +53,21 @@ def make_button_click_trigger(x_range, y_range):
         return False
     return f
 
-# the ranges define where on the screen the button is
+# the 'waiting loop' which displays a waitscreen
+def wait_for_continues(waitscreen_func, waitscreen_args, function_relationships):
+    waitscreen_func(*waitscreen_args)
+    while True:
+        events = pygame.event.get()
+        for trigger_func, continue_func in function_relationships:
+            if trigger_func(events = events): continue_func()
+
+# the ranges define where on the screen the button is. These are a bunch of 'trigger' functions
 new_game_clicked    = make_button_click_trigger(x_range = (151, 254), y_range = (392, 441))
 high_scores_clicked = make_button_click_trigger(x_range = (256, 360), y_range = (392, 441))
 controls_clicked    = make_button_click_trigger(x_range = (361, 446), y_range = (392, 441))
 tutorial_clicked    = make_button_click_trigger(x_range = (468, 574), y_range = (392, 441))
 options_clicked     = make_button_click_trigger(x_range = (574, 678), y_range = (392, 441))
 credits_clicked     = make_button_click_trigger(x_range = (681, 801), y_range = (392, 441))
-
-def wait_for_continues(waitscreen_func, waitscreen_args, function_relationships):
-    waitscreen_func(*waitscreen_args)
-    while True:
-        events = pygame.event.get()
-        for trigger_func, t_args, continue_func, c_args in function_relationships:
-            if trigger_func(events = events, *t_args): continue_func(*c_args)
 
 screen = pygame.display.set_mode(size = (1000, 563))
 background = Background(START_SCREEN)
