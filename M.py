@@ -58,6 +58,8 @@ def wait_for_continues(waitscreen_func, waitscreen_args, function_relationships)
     waitscreen_func(*waitscreen_args)
     while True:
         events = pygame.event.get()
+        keys = pygame.key.get_pressed()
+        if keys[K_ESCAPE]: sys.exit()
         for trigger_func, continue_func in function_relationships:
             if trigger_func(events = events): continue_func()
 
