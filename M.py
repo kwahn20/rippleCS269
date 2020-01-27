@@ -64,7 +64,6 @@ def startscreen_wait():
         if new_game_clicked(events): return()
         if high_scores_clicked(events): highscores_wait()
         if credits_clicked(events): credits_wait()
-        print(pygame.mouse.get_pos())
 
 def highscores_wait():
     back_clicked = make_button_click_trigger(x_range = (19, 128), y_range = (21, 83))
@@ -75,7 +74,18 @@ def highscores_wait():
         if keys[K_ESCAPE]: sys.exit()
         if back_clicked(events):
             show_image(screen, startscreen_background)
-            return() 
+            return()
+
+def credits_wait():
+    back_clicked = make_button_click_trigger(x_range = (19, 128), y_range = (21, 83))
+    show_image(screen, credits_background)
+    while True:
+        events = pygame.event.get()
+        keys = pygame.key.get_pressed()
+        if keys[K_ESCAPE]: sys.exit()
+        if back_clicked(events):
+            show_image(screen, startscreen_background)
+            return()
 
 def credits_wait():
     back_clicked = make_button_click_trigger(x_range = (19, 128), y_range = (21, 83))
