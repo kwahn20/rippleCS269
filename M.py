@@ -4,7 +4,7 @@ import sounds
 import time
 from pygame.locals import *
 
-START_SCREEN = 'mainscreen.png'
+START_SCREEN = 'images/titlescreen.png'
 HIGHSCORES = 'images/HighScores.png'
 
 # a class for background images such as the start screen, or any other images
@@ -77,7 +77,7 @@ def highscores_wait():
         if keys[K_ESCAPE]: sys.exit()
         if back_clicked(events):
             show_image(screen, startscreen_background)
-            return() 
+            return()
 
 screen = pygame.display.set_mode(size = (1000, 563))
 startscreen_background = Background(START_SCREEN)
