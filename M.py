@@ -4,8 +4,9 @@ import sounds
 import time
 from pygame.locals import *
 
-START_SCREEN = 'mainscreen.png'
+START_SCREEN = 'images/titlescreen.png'
 HIGHSCORES = 'images/HighScores.png'
+CREDITS = 'images/Credits.png'
 
 # a class for background images such as the start screen, or any other images
 # that we want in the background (like a background for the game or whatnot)
@@ -30,7 +31,6 @@ class Background(pygame.sprite.Sprite):
 #     player.sound_interval += 1
 
 def show_image(screen, background_img):
-    # draw the start screen
     screen.fill((0,0,0))
     screen.blit(background_img.image, background_img.rect)
     pygame.display.flip()
@@ -48,12 +48,9 @@ def make_button_click_trigger(x_range, y_range):
     return f
 
 def startscreen_wait():
-    new_game_clicked    = make_button_click_trigger(x_range = (151, 254), y_range = (392, 441))
-    high_scores_clicked = make_button_click_trigger(x_range = (256, 360), y_range = (392, 441))
-    controls_clicked    = make_button_click_trigger(x_range = (361, 446), y_range = (392, 441))
-    tutorial_clicked    = make_button_click_trigger(x_range = (468, 574), y_range = (392, 441))
-    options_clicked     = make_button_click_trigger(x_range = (574, 678), y_range = (392, 441))
-    credits_clicked     = make_button_click_trigger(x_range = (681, 801), y_range = (392, 441))
+    new_game_clicked    = make_button_click_trigger(x_range = (190, 312), y_range = (380, 430))
+    high_scores_clicked = make_button_click_trigger(x_range = (442, 570), y_range = (380, 430))
+    credits_clicked     = make_button_click_trigger(x_range = (685, 812), y_range = (380, 430))
 
      # load the music for the start screen and play on loop
     pygame.mixer.music.load('track1.wav')
@@ -66,10 +63,11 @@ def startscreen_wait():
         if keys[K_ESCAPE]: sys.exit()
         if new_game_clicked(events): return()
         if high_scores_clicked(events): highscores_wait()
+        if credits_clicked(events): credits_wait()
+        print(pygame.mouse.get_pos())
 
 def highscores_wait():
     back_clicked = make_button_click_trigger(x_range = (19, 128), y_range = (21, 83))
-    #19,21 128, 83
     show_image(screen, highscores_image)
     while True:
         events = pygame.event.get()
@@ -79,9 +77,22 @@ def highscores_wait():
             show_image(screen, startscreen_background)
             return() 
 
+def credits_wait():
+    back_clicked = make_button_click_trigger(x_range = (19, 128), y_range = (21, 83))
+    show_image(screen, credits_background)
+    while True:
+        events = pygame.event.get()
+        keys = pygame.key.get_pressed()
+        if keys[K_ESCAPE]: sys.exit()
+        if back_clicked(events):
+            show_image(screen, startscreen_background)
+            return()
+
 screen = pygame.display.set_mode(size = (1000, 563))
+
 startscreen_background = Background(START_SCREEN)
 highscores_image = Background(HIGHSCORES)
+credits_background = Background(CREDITS)
 
 if(__name__ == '__main__'):
     pass
