@@ -5,6 +5,7 @@ import time
 from pygame.locals import *
 
 START_SCREEN = 'mainscreen.png'
+HIGHSCORES = 'images/HighScores.png'
 
 # a class for background images such as the start screen, or any other images
 # that we want in the background (like a background for the game or whatnot)
@@ -28,31 +29,11 @@ class Background(pygame.sprite.Sprite):
 #             player.which_step += 1
 #     player.sound_interval += 1
 
-# displays the start screen and starts the music
-def show_start_screen(screen, background_img):
+def show_image(screen, background_img):
     # draw the start screen
     screen.fill((0,0,0))
     screen.blit(background_img.image, background_img.rect)
     pygame.display.flip()
-
-    # load the music for the start screen and play on loop
-    pygame.mixer.music.load('track1.wav')
-    pygame.mixer.music.play(-1)
-
-def show_highscores():
-    print('highscores was clicked')
-
-def show_controls():
-    print('controls was clicked')
-
-def show_tutorial():
-    print('tutorial clicked')
-
-def show_options():
-    print('options clicked')
-
-def show_credits():
-    print('credits clicked')
 
 # make a 'trigger' function for a button located in the given x and y range
 def make_button_click_trigger(x_range, y_range):
@@ -66,27 +47,41 @@ def make_button_click_trigger(x_range, y_range):
         return False
     return f
 
-# the 'waiting loop' which displays a waitscreen
-def wait_for_continues(waitscreen_func, waitscreen_args, function_relationships):
-    waitscreen_func(*waitscreen_args)
+def startscreen_wait():
+    new_game_clicked    = make_button_click_trigger(x_range = (151, 254), y_range = (392, 441))
+    high_scores_clicked = make_button_click_trigger(x_range = (256, 360), y_range = (392, 441))
+    controls_clicked    = make_button_click_trigger(x_range = (361, 446), y_range = (392, 441))
+    tutorial_clicked    = make_button_click_trigger(x_range = (468, 574), y_range = (392, 441))
+    options_clicked     = make_button_click_trigger(x_range = (574, 678), y_range = (392, 441))
+    credits_clicked     = make_button_click_trigger(x_range = (681, 801), y_range = (392, 441))
+
+     # load the music for the start screen and play on loop
+    pygame.mixer.music.load('track1.wav')
+    pygame.mixer.music.play(-1)
+    show_image(screen, startscreen_background)
+
     while True:
         events = pygame.event.get()
         keys = pygame.key.get_pressed()
         if keys[K_ESCAPE]: sys.exit()
-        for trigger_func, continue_func in function_relationships:
-            if trigger_func(events = events): continue_func()
+        if new_game_clicked(events): return()
+        if high_scores_clicked(events): highscores_wait()
 
-# the ranges define where on the screen the button is.
-# These are a bunch of 'trigger' functions
-new_game_clicked    = make_button_click_trigger(x_range = (151, 254), y_range = (392, 441))
-high_scores_clicked = make_button_click_trigger(x_range = (256, 360), y_range = (392, 441))
-controls_clicked    = make_button_click_trigger(x_range = (361, 446), y_range = (392, 441))
-tutorial_clicked    = make_button_click_trigger(x_range = (468, 574), y_range = (392, 441))
-options_clicked     = make_button_click_trigger(x_range = (574, 678), y_range = (392, 441))
-credits_clicked     = make_button_click_trigger(x_range = (681, 801), y_range = (392, 441))
+def highscores_wait():
+    back_clicked = make_button_click_trigger(x_range = (19, 128), y_range = (21, 83))
+    #19,21 128, 83
+    show_image(screen, highscores_image)
+    while True:
+        events = pygame.event.get()
+        keys = pygame.key.get_pressed()
+        if keys[K_ESCAPE]: sys.exit()
+        if back_clicked(events):
+            show_image(screen, startscreen_background)
+            return() 
 
 screen = pygame.display.set_mode(size = (1000, 563))
-background = Background(START_SCREEN)
+startscreen_background = Background(START_SCREEN)
+highscores_image = Background(HIGHSCORES)
 
 if(__name__ == '__main__'):
     pass
