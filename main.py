@@ -215,7 +215,7 @@ class App:
         # self.windowWidth = 1920
         # self.windowHeight = 1080
         tileSize = 50
-        self.player = Player(tileSize*2, tileSize*2, 2, tileSize/2)
+        self.player = Player(tileSize*2, tileSize*2, 10, tileSize/2)
         self.maze = Maze(tileSize)
         self.guards = []
 
