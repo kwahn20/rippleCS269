@@ -11,6 +11,7 @@ class Player:
         self.y = y
         self.rect = pygame.Rect(self.x,self.y, tileSize, tileSize)
         self.speed = speed
+        self.beingChased = False
 
         # self.images = [pygame.image.load("images/unknownBack.png"), pygame.image.load("images/unknownFront.png"), pygame.image.load("images/unknownLeft.png"), pygame.image.load("images/unknownRight.png")]
         # self.image_rects = [[pygame.Rect(19, 19, 37, 38), pygame.Rect(19, 19, 37, 38)], [pygame.Rect(19, 19, 37, 38), pygame.Rect(19, 19, 37, 38)], [pygame.Rect(14, 13, 35, 38), pygame.Rect(81, 13, 32, 38)], [pygame.Rect(14, 13, 32, 38), pygame.Rect(78, 13, 35, 38)]]
@@ -56,6 +57,13 @@ class Player:
         self.play_steps()
         self.rect = pygame.Rect(self.x,self.y, tileSize, tileSize)
 
+    def toggleChase(self):
+        self.beingChased = not self.beingChased
+        if not self.beingChased:
+            self.speed /= 1.5
+        else:
+            self.speed *= 1.5
+
 # for now this is almost the same as the Player class
 # keeping them seperate for now just since they might end up being very different
 class Guard:
@@ -98,6 +106,13 @@ class Guard:
     def moveBack(self):
         self.previousMove()
 
+    def toggleChase(self):
+        self.chasePlayer = not self.chasePlayer
+        if not self.chasePlayer:
+            self.speed /= 1.5
+        else:
+            self.speed *= 1.5
+
     def updatePosition(self, t_x, t_y):
         # self.prevPos = [self.x, self.y]
         # print(t_x, t_y, self.x, self.y)
@@ -135,26 +150,57 @@ class Guard:
             self.y = t_y
 
 class Maze:
-    def __init__(self, tileSize, tileResolution):
-        self.M = 16
-        self.N = 16
-        self.maze = [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-                    [1,1,0,0,0,0,0,0,0,1,0,1,0,0,0,1],
-                    [1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,7],
-                    [1,0,0,1,1,1,0,1,1,0,0,1,1,0,0,1],
-                    [1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1],
-                    [1,1,1,0,0,1,1,1,0,1,1,1,0,1,1,1],
-                    [1,0,0,0,1,1,1,1,1,1,1,0,0,0,2,1],
-                    [1,0,0,1,1,2,2,2,2,2,2,1,0,1,2,1],
-                    [1,0,0,0,0,2,1,1,1,1,2,0,1,0,2,1],
-                    [1,0,0,1,0,2,2,6,2,2,2,0,0,1,2,1],
-                    [1,0,0,0,1,1,1,5,1,0,0,0,1,0,2,1],
-                    [1,2,2,2,2,0,1,1,1,0,0,0,0,1,1,1],
-                    [1,2,0,0,2,0,0,0,1,1,0,0,0,0,0,3],
-                    [1,2,1,1,2,1,1,1,0,0,1,1,1,1,0,1],
-                    [1,2,2,2,2,0,0,0,0,0,0,0,4,1,1,1],
-                    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]
-        
+    def __init__(self, tileSize):
+        self.M = 16*3
+        self.N = 16*3
+        self.maze = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                     [1, 1, 1, 1, 1, 1, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 1, 1, 1, 9, 9, 9, 1, 1, 1, 9, 9, 9, 9, 9, 9, 9, 9, 9, 1, 1, 1],
+                     [1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 9, 0, 9, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1],
+                     [1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 9, 9, 9, 9, 0, 0, 0, 0, 9, 1, 1, 1, 9, 0, 9, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 9, 9, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 9, 0, 0, 0, 0, 9, 9, 9, 9, 9, 0, 9, 9, 9, 9, 9, 0, 0, 0, 0, 0, 0, 0, 9, 9, 7, 9],
+                     [1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 9],
+                     [1, 1, 1, 9, 0, 0, 0, 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 1, 1, 1, 9, 9, 9, 9, 9, 9, 9, 0, 0, 0, 0, 9, 9, 9, 9, 9, 9, 9, 9, 0, 0, 0, 0, 9, 9, 7, 9],
+                     [1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 9, 9, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0, 9, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0, 9, 1, 1, 1, 1, 1, 1, 9, 9, 9, 9, 0, 9, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 0, 0, 0, 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0, 9, 9, 9, 9, 9, 9, 9, 1, 1, 1, 9, 0, 9, 9, 9, 9, 9, 9, 9, 9, 0, 0, 0, 0, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 9, 9, 9, 9, 9, 9, 0, 0, 0, 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0, 9, 1, 1, 1, 9, 9, 9, 9, 9, 9, 9, 0, 9, 9, 9, 9, 9, 9, 9, 1, 1, 1],
+                     [1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                     [1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                     [1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0, 9, 9, 9, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 9, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                     [1, 1, 1, 9, 9, 9, 9, 9, 9, 9, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 9, 9, 9, 0, 9, 9, 9, 9, 9, 9, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 0, 0, 0, 0, 9, 9, 9, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 9, 9, 9, 0, 9, 9, 9, 9, 9, 2, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 1, 1, 1, 9, 0, 9, 1, 1, 1, 9, 2, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 9, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 9, 1, 1, 1, 9, 0, 9, 1, 1, 1, 9, 2, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 9, 2, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 2, 9, 1, 1, 1, 9, 9, 9, 1, 1, 1, 9, 2, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 0, 0, 0, 0, 9, 9, 9, 9, 9, 9, 9, 9, 2, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 2, 9, 9, 9, 9, 1, 1, 1, 9, 9, 9, 9, 2, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 2, 0, 0, 0, 9, 1, 1, 1, 9, 0, 0, 0, 6, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 0, 0, 0, 0, 9, 9, 9, 9, 9, 0, 0, 0, 2, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 2, 0, 0, 0, 9, 1, 1, 1, 9, 9, 9, 9, 2, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 9, 0, 0, 0, 2, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 2, 0, 0, 0, 9, 9, 9, 9, 1, 1, 1, 9, 2, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 9, 0, 0, 0, 2, 2, 2, 2, 2, 2, 6, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 9, 2, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0, 9, 9, 9, 9, 9, 0, 0, 0, 0, 0, 0, 0, 9, 9, 9, 9, 1, 1, 1, 9, 2, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 0, 0, 0, 0, 9, 9, 9, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 5, 9, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 9, 9, 9, 9, 2, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 5, 9, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 9, 0, 0, 0, 2, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 5, 9, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 9, 9, 9, 9, 9, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 9, 0, 9, 9, 9, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 9, 9, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                     [1, 1, 1, 9, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                     [1, 1, 1, 9, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 9, 9, 9, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                     [1, 1, 1, 9, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 9, 9, 9, 9, 9, 9, 9, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+                     [1, 1, 1, 9, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 9],
+                     [1, 1, 1, 9, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 1, 1, 1, 1, 1, 1, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0, 9, 9, 9, 9],
+                     [1, 1, 1, 9, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 9, 9, 9, 9, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 9, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0, 0, 0, 0, 9, 9, 9, 9, 9, 9, 9, 9, 4, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                     [1, 1, 1, 9, 2, 2, 2, 6, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                     [1, 1, 1, 9, 9, 9, 9, 2, 9, 9, 2, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 4, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
 
         self.maze = [list(i) for i in zip(*self.maze)]
 
@@ -175,16 +221,7 @@ class Maze:
         #             [1,0,0,1,5,1,1,1,0,0,0,1,2,0,1,1],
         #             [1,2,2,2,2,2,2,2,2,2,1,0,2,1,1,1],
         #             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]
-
-        self.unitcircle = []
-        self.tileResolution = tileResolution
-        self.tileSize = int(tileSize/tileResolution)*tileResolution
         self.tileSize = tileSize
-
-        for i in range(-100, 125, 25):
-            for j in range(-100, 125, 25):
-                if i != 0 and j != 0:
-                    self.unitcircle.append(pygame.Vector2(i/100.0, j/100.0))
 
         self.walls = []
         self.litWalls = []
@@ -197,35 +234,6 @@ class Maze:
     def getTileCoords(self, x, y):
         return (int(y/self.tileSize), int(x/self.tileSize))
 
-    def pingAudioLines(self, x, y, color):
-        t_x, t_y = self.getTileCoords(y, x)
-
-        for dir in self.unitcircle:
-            count = 0
-            while count < 6:
-                count += 1
-                try:
-                    if self.maze[int(t_x + (dir.x*count))][int(t_y + (dir.y*count))] == 1:
-                        self.litWalls.append([int(t_x + (dir.x*count)), int(t_y + (dir.y*count)), color, x, y])
-                        break
-                except:
-                    break
-
-    def searchForPlayer(self, x, y, p_x, p_y):
-        t_x, t_y = self.getTileCoords(y, x)
-        p_t_x, p_t_y = self.getTileCoords(p_y, p_x)
-
-        for dir in self.unitcircle:
-            count = 0
-            while count < 2:
-                count += 1
-                try:
-                    if int(t_x + (dir.x*count)) == p_t_x and int(t_y + (dir.y*count)) == p_t_y:
-                        return True
-                except:
-                    break
-        return False
-
     def draw(self, background):
         for i in range(0, len(self.walls)):
             pygame.draw.rect(background, (0, 128, 255), self.walls[i])
@@ -237,16 +245,58 @@ class App:
                 return True
         return False
 
+    def pingAudioLines(self, x, y, color, chase=False):
+        t_x, t_y = self.maze.getTileCoords(y, x)
+
+        for dir in self.unitcircle:
+            count = 0
+            wallCount = 0
+            while count < 8:
+                count += 1
+                try:
+                    if self.maze.maze[int(t_x + (dir.x*count))][int(t_y + (dir.y*count))] == 1:
+                        self.maze.litWalls.append([int(t_x + (dir.x*count)), int(t_y + (dir.y*count)), color, x, y, chase])
+                        wallCount += 1
+                        if wallCount == 5:
+                            break
+                except:
+                    break
+
+    def searchForPlayer(self, x, y, p_x, p_y):
+        t_x, t_y = self.maze.getTileCoords(y, x)
+        p_t_x, p_t_y = self.maze.getTileCoords(p_y, p_x)
+
+        max_tiles = 7
+        if self.player.beingChased:
+            max_tiles = 14
+
+        for dir in self.unitcircle:
+            count = 0
+            while count < max_tiles:
+                count += 1
+                try:
+                    if int(t_x + (dir.x*count)) == p_t_x and int(t_y + (dir.y*count)) == p_t_y:
+                        return True
+                except:
+                    break
+        return False
+
     def __init__(self):
         self._running = True
         self.windowWidth = 1000
         self.windowHeight = 563
-        tileResolution = 5
         # self.windowWidth = 1920
         # self.windowHeight = 1080
-        tileSize = 50
-        self.maze = Maze(tileSize, tileResolution)
+        tileSize = 60/3
+        self.maze = Maze(tileSize)
         tileSize = self.maze.tileSize
+
+        self.unitcircle = []
+
+        for i in range(-100, 120, 20):
+            for j in range(-100, 120, 20):
+                if i != 0 and j != 0:
+                    self.unitcircle.append(pygame.Vector2(i/100.0, j/100.0))
 
         self.guards = []
         for row in range(0, len(self.maze.maze)):
@@ -255,7 +305,7 @@ class App:
                     self.maze.maze[row][col] = 2
                     self.guards.append(Guard(tileSize*row + tileSize/4, tileSize*col + tileSize/4, 1, col, row))
                 if self.maze.maze[row][col] == 3:
-                    self.player = Player(tileSize*row, tileSize*col, 2, tileSize/2)
+                    self.player = Player(tileSize*row, tileSize*col, 2, 3*tileSize/2)
 
     def on_init(self):
         pygame.init()
@@ -297,8 +347,10 @@ class App:
             # print(self.guards[i].frame_count)
             # pygame.draw.rect(self.background, (255, 128, 0), self.guards[i])
             idx = self.guards[i].image_idx
-            self.background.blit(self.guards[i].images[idx], (self.guards[i].x, self.guards[i].y), self.guards[i].image_rects[idx][self.guards[i].animation_idx])
-            self.fog_of_war.blit(self.guards[i].images[idx], (self.guards[i].x, self.guards[i].y), self.guards[i].image_rects[idx][self.guards[i].animation_idx])
+            width = self.guards[i].image_rects[idx][self.guards[i].animation_idx].w
+            height = self.guards[i].image_rects[idx][self.guards[i].animation_idx].h
+            self.background.blit(self.guards[i].images[idx], (self.guards[i].x-(width/2), self.guards[i].y-(height/2)), self.guards[i].image_rects[idx][self.guards[i].animation_idx])
+            self.fog_of_war.blit(self.guards[i].images[idx], (self.guards[i].x-(width/2), self.guards[i].y-(height/2)), self.guards[i].image_rects[idx][self.guards[i].animation_idx])
 
         # pygame.draw.circle(self.fog_of_war,(0,0,0,0),(self.player.x+22,self.player.y+22),100,0)
         # for i in range(0, len(self.guards)):
@@ -314,7 +366,11 @@ class App:
             if self.maze.maze[x][y] == 1:
                 p_x, p_y = self.maze.getTileCoords(self.maze.litWalls[i][4]+22, self.maze.litWalls[i][3]+22)
 
-                alpha = 255 - (255 * (4.0 - math.sqrt((p_x-x)**2 + (p_y-y)**2))/3.0)
+                max_distance = 5.0
+                if self.maze.litWalls[i][5]:
+                    max_distance = 7.0
+
+                alpha = 255 - (255 * (max_distance - math.sqrt((p_x-x)**2 + (p_y-y)**2))/3.0)
                 alpha = 255 if alpha > 255 else alpha
                 alpha = 0 if alpha < 0 else alpha
                 if alpha < 225:
@@ -338,12 +394,15 @@ class App:
 
         pygame.mixer.music.stop()
 
+        self.newChase = False
+
         while( self._running ):
             pygame.event.pump()
             keys = pygame.key.get_pressed()
             self.maze.litWalls = []
 
-            self.maze.pingAudioLines(self.player.x, self.player.y, (0,0,255))
+            self.pingAudioLines(self.player.x, self.player.y, (0,0,255), self.player.beingChased)
+
 
             for guard in self.guards:
                 t_x, t_y = self.maze.getTileCoords(guard.y, guard.x)
@@ -404,8 +463,8 @@ class App:
                     if not moved:
                         guard.moveBack()
 
-                self.maze.pingAudioLines(guard.x, guard.y, (255,0,0))
-                foundPlayer = self.maze.searchForPlayer(guard.x, guard.y, self.player.x, self.player.y)
+                self.pingAudioLines(guard.x, guard.y, (255,0,0))
+                foundPlayer = self.searchForPlayer(guard.x, guard.y, self.player.x, self.player.y)
 
                 if foundPlayer or guard.chasePlayer:
                     p_t_x, p_t_y = self.maze.getTileCoords(self.player.y, self.player.x)
@@ -413,7 +472,10 @@ class App:
                     if not path:
                         continue
 
-                    guard.chasePlayer = True
+                    if not guard.chasePlayer:
+                        guard.toggleChase()
+                        self.newChase = True
+
                     if len(path) > 0:
                         if path[0][0] == t_x and path[0][1] == t_y:
                             del path[0]
@@ -429,27 +491,39 @@ class App:
                             guard.moveDown()
 
             if (keys[K_RIGHT]):
-                self.player.moveRight(self.maze.tileSize/2)
+                self.player.moveRight(3*self.maze.tileSize/2)
                 if self.collision(self.player.rect, self.maze.walls):
-                    self.player.moveLeft(self.maze.tileSize/2)
+                    self.player.moveLeft(3*self.maze.tileSize/2)
+                elif self.newChase and not self.player.beingChased:
+                    self.newChase = False
+                    self.player.toggleChase()
 
             if (keys[K_LEFT]):
-                self.player.moveLeft(self.maze.tileSize/2)
+                self.player.moveLeft(3*self.maze.tileSize/2)
                 if self.collision(self.player.rect, self.maze.walls):
-                    self.player.moveRight(self.maze.tileSize/2)
+                    self.player.moveRight(3*self.maze.tileSize/2)
+                elif self.newChase and not self.player.beingChased:
+                    self.newChase = False
+                    self.player.toggleChase()
 
             if (keys[K_UP]):
-                self.player.moveUp(self.maze.tileSize/2)
+                self.player.moveUp(3*self.maze.tileSize/2)
                 if self.collision(self.player.rect, self.maze.walls):
-                    self.player.moveDown(self.maze.tileSize/2)
+                    self.player.moveDown(3*self.maze.tileSize/2)
+                elif self.newChase and not self.player.beingChased:
+                    self.newChase = False
+                    self.player.toggleChase()
 
             if (keys[K_DOWN]):
-                self.player.moveDown(self.maze.tileSize/2)
+                self.player.moveDown(3*self.maze.tileSize/2)
                 if self.collision(self.player.rect, self.maze.walls):
-                    self.player.moveUp(self.maze.tileSize/2)
+                    self.player.moveUp(3*self.maze.tileSize/2)
+                elif self.newChase and not self.player.beingChased:
+                    self.newChase = False
+                    self.player.toggleChase()
 
             coords = self.maze.getTileCoords(self.player.y, self.player.x)
-            print(coords)
+
             if self.maze.maze[coords[0]][coords[1]] == 7:
                 print("you escaped")
 
