@@ -272,7 +272,7 @@ class App:
 
         for dir in self.unitcircle:
             count = 0
-            while count < max_tiles:
+            while count < max_tiles and self.maze.maze[int(t_x + (dir.x*count))][int(t_y + (dir.y*count))] != 1:
                 count += 1
                 try:
                     if int(t_x + (dir.x*count)) == p_t_x and int(t_y + (dir.y*count)) == p_t_y:
