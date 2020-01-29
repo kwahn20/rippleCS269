@@ -24,10 +24,10 @@ class Player:
 
         self.image_rects = [
             # right
-            pygame.Rect(0, 0, 40, 40), 
+            pygame.Rect(0, 0, 40, 40),
 
             # left
-            pygame.Rect(0, 0, 40, 40), 
+            pygame.Rect(0, 0, 40, 40),
 
             # front
             pygame.Rect(0, 0, 40, 40)
@@ -41,13 +41,13 @@ class Player:
         # self.image = pygame.image.load("Sounds/player.png")
 
     def play_steps(self):
-        if self.sound_interval % 12 == 0:
+        if self.sound_interval % 10 == 0:
             if self.which_step % 2 == 1:
-                # sounds.step_1_set_1.play()
+                sounds.step_1_set_1.play()
                 # print('played step 1')
                 self.which_step += 1
             else:
-                # sounds.step_2_set_1.play()
+                sounds.step_2_set_1.play()
                 # print('played step 2')
                 self.which_step += 1
         self.sound_interval += 1
@@ -342,8 +342,6 @@ class App:
 
     def on_init(self):
         pygame.init()
-        pygame.mixer.init() # this is for sounds
-
         self.window = (self.windowWidth,self.windowHeight)
         self.screen = pygame.display.set_mode(self.window)
 
@@ -389,8 +387,8 @@ class App:
                 self.guards[i].image_rects[idx][self.guards[i].animation_idx]
             )
             self.fog_of_war.blit(
-                self.guards[i].images[idx], 
-                (self.guards[i].x-(width/2), self.guards[i].y-(height/2)), 
+                self.guards[i].images[idx],
+                (self.guards[i].x-(width/2), self.guards[i].y-(height/2)),
                 self.guards[i].image_rects[idx][self.guards[i].animation_idx]
             )
 
@@ -453,8 +451,8 @@ class App:
                     self.guards.append(Guard(50*row + 50/4, 50*col + 50/4, 1, col, row))
                 if self.maze.maze[row][col] == 3:
                     self.player = Player(20*row, 20*col, 10, 30)
-                    print(self.player.y)
-                    print(self.maze.getTileCoords(self.player.x, self.player.y))
+                    #print(self.player.y)
+                    #print(self.maze.getTileCoords(self.player.x, self.player.y))
 
         if self.on_init() == False:
             self._running = False
@@ -590,7 +588,7 @@ class App:
                     self.player.toggleChase()
 
             coords = self.maze.getTileCoords(self.player.y, self.player.x)
-            print(coords)
+            #print(coords)
             # print(len(self.maze.maze))
             # print(len(self.maze.maze[0]))
             #
