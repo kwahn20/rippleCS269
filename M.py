@@ -48,6 +48,7 @@ def startscreen_wait():
     show_image(screen, startscreen_background)
 
     while True:
+
         events = pygame.event.get()
         keys = pygame.key.get_pressed()
         if keys[K_ESCAPE]: sys.exit()
