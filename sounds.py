@@ -1,6 +1,9 @@
 import pygame
 pygame.mixer.init(buffer = 64)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5bb78147ed5ad626ffc02bc014c248a206811eab
 
 button_press_2 = pygame.mixer.Sound('Sounds/home_screen_button_press_2.wav')
 
