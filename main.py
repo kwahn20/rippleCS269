@@ -6,19 +6,33 @@ import sounds
 import astar
 import Story
 
+# image needs to be 30 by 30
+
 class Player:
     def __init__(self, x, y, speed, tileSize):
         self.x = x
         self.y = y
-        self.rect = pygame.Rect(self.x,self.y, tileSize, tileSize)
+        self.rect = pygame.Rect(self.x - 15,self.y - 15, 30, 30)
         self.speed = speed
         self.beingChased = False
 
-        # self.images = [pygame.image.load("images/unknownBack.png"), pygame.image.load("images/unknownFront.png"), pygame.image.load("images/unknownLeft.png"), pygame.image.load("images/unknownRight.png")]
-        # self.image_rects = [[pygame.Rect(19, 19, 37, 38), pygame.Rect(19, 19, 37, 38)], [pygame.Rect(19, 19, 37, 38), pygame.Rect(19, 19, 37, 38)], [pygame.Rect(14, 13, 35, 38), pygame.Rect(81, 13, 32, 38)], [pygame.Rect(14, 13, 32, 38), pygame.Rect(78, 13, 35, 38)]]
-        # self.image_idx = 0
-        # self.animation_idx = 0
-        # self.frame_count = 0
+        self.images = [
+            pygame.transform.scale(pygame.image.load("images/RightPlayerRes.png"), (40, 40)),
+            pygame.transform.scale(pygame.image.load("images/LeftPlayerRes.png"), (40, 40)),
+            pygame.transform.scale(pygame.image.load("images/FrontPlayerRes.png"), (40, 40))
+            ]
+
+        self.image_rects = [
+            # right
+            pygame.Rect(0, 0, 40, 40), 
+
+            # left
+            pygame.Rect(0, 0, 40, 40), 
+
+            # front
+            pygame.Rect(0, 0, 40, 40)
+        ]
+        self.image_idx = 2
 
         # fields for temporary implementation of step sound
         self.which_step = 1
@@ -41,22 +55,26 @@ class Player:
     def moveRight(self, tileSize):
         self.x = self.x + self.speed
         self.play_steps()
-        self.rect = pygame.Rect(self.x,self.y, tileSize, tileSize)
+        self.rect = pygame.Rect(self.x - 15,self.y - 15, 30, 30)
+        self.image_idx = 0
 
     def moveLeft(self, tileSize):
         self.x = self.x - self.speed
         self.play_steps()
-        self.rect = pygame.Rect(self.x,self.y, tileSize, tileSize)
+        self.rect = pygame.Rect(self.x - 15,self.y - 15, 30, 30)
+        self.image_idx = 1
 
     def moveUp(self, tileSize):
         self.y = self.y - self.speed
         self.play_steps()
-        self.rect = pygame.Rect(self.x,self.y, tileSize, tileSize)
+        self.rect = pygame.Rect(self.x - 15,self.y - 15, 30, 30)
+        self.image_idx = 2
 
     def moveDown(self, tileSize):
         self.y = self.y + self.speed
         self.play_steps()
-        self.rect = pygame.Rect(self.x,self.y, tileSize, tileSize)
+        self.rect = pygame.Rect(self.x - 15,self.y - 15, 30, 30)
+        self.image_idx = 2
 
     def toggleChase(self):
         self.beingChased = not self.beingChased
@@ -349,8 +367,9 @@ class App:
         self.background.fill((0,0,0))
         self.fog_of_war.fill((0,0,0))
 
-        pygame.draw.rect(self.background,(0,200,0),self.player.rect)
-        pygame.draw.rect(self.fog_of_war,(0,0,0,0),self.player.rect)
+
+        # pygame.draw.rect(self.background,(0,200,0),self.player.rect)
+        # pygame.draw.rect(self.fog_of_war,(0,0,0,0),self.player.rect)
 
         self.maze.draw(self.background)
 
@@ -364,8 +383,31 @@ class App:
             idx = self.guards[i].image_idx
             width = self.guards[i].image_rects[idx][self.guards[i].animation_idx].w
             height = self.guards[i].image_rects[idx][self.guards[i].animation_idx].h
-            self.background.blit(self.guards[i].images[idx], (self.guards[i].x-(width/2), self.guards[i].y-(height/2)), self.guards[i].image_rects[idx][self.guards[i].animation_idx])
-            self.fog_of_war.blit(self.guards[i].images[idx], (self.guards[i].x-(width/2), self.guards[i].y-(height/2)), self.guards[i].image_rects[idx][self.guards[i].animation_idx])
+            self.background.blit(
+                self.guards[i].images[idx],
+                (self.guards[i].x-(width/2), self.guards[i].y-(height/2)),
+                self.guards[i].image_rects[idx][self.guards[i].animation_idx]
+            )
+            self.fog_of_war.blit(
+                self.guards[i].images[idx], 
+                (self.guards[i].x-(width/2), self.guards[i].y-(height/2)), 
+                self.guards[i].image_rects[idx][self.guards[i].animation_idx]
+            )
+
+        # animation for the player
+        idx = self.player.image_idx
+        width = self.player.image_rects[idx].w
+        height = self.player.image_rects[idx].h
+        self.background.blit(
+            self.player.images[idx],
+            (self.player.x - (width / 2), self.player.y - (height / 2)),
+            self.player.image_rects[idx]
+        )
+        self.fog_of_war.blit(
+            self.player.images[idx],
+            (self.player.x - (width / 2), self.player.y - (height / 2)),
+            self.player.image_rects[idx]
+        )
 
         # pygame.draw.circle(self.fog_of_war,(0,0,0,0),(self.player.x+22,self.player.y+22),100,0)
         # for i in range(0, len(self.guards)):
@@ -392,8 +434,8 @@ class App:
                     pygame.draw.rect(self.fog_of_war, (0, 0, 0, alpha), pygame.Rect(x*self.maze.tileSize, y*self.maze.tileSize, self.maze.tileSize, self.maze.tileSize))
                     pygame.draw.rect(self.background, self.maze.litWalls[i][2], pygame.Rect(x*self.maze.tileSize, y*self.maze.tileSize, self.maze.tileSize, self.maze.tileSize))
 
-        # self.fog_of_war.set_colorkey((60,60,60))
-        self.background.blit(self.fog_of_war,(0,0))
+        # THIS IS FOG OF WAR
+        # self.background.blit(self.fog_of_war,(0,0))
 
         # self.screen.blit(pygame.transform.scale(self.background, (self.background.get_width()*2, self.background.get_height()*2)), (-self.player.x + self.window[0]/2, -self.player.y + self.window[1]/2))
         self.screen.blit(self.background, (-self.player.x + self.window[0]/2, -self.player.y + self.window[1]/2))
@@ -426,7 +468,7 @@ class App:
             keys = pygame.key.get_pressed()
             self.maze.litWalls = []
 
-            self.pingAudioLines(self.player.x, self.player.y, (0,0,255), self.player.beingChased)
+            self.pingAudioLines(self.player.x - self.player.rect.w / 2, self.player.y - self.player.rect.h / 2, (0,0,255), self.player.beingChased)
 
 
             for guard in self.guards:
