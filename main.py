@@ -41,12 +41,15 @@ class Player:
         # self.image = pygame.image.load("Sounds/player.png")
 
     def play_steps(self):
-        if self.sound_interval % 12 == 0:
+        if self.sound_interval % 10 == 0:
             if self.which_step % 2 == 1:
-                # sounds.step_1_set_1.play()
+
+                sounds.step_1_set_1.play()
+                # print('played step 1')
                 self.which_step += 1
             else:
-                # sounds.step_2_set_1.play()
+                sounds.step_2_set_1.play()
+                # print('played step 2')
                 self.which_step += 1
         self.sound_interval += 1
 
@@ -321,8 +324,6 @@ class App:
 
     def on_init(self):
         pygame.init()
-        pygame.mixer.init() # this is for sounds
-
         self.window = (self.windowWidth,self.windowHeight)
         self.screen = pygame.display.set_mode(self.window)
 
@@ -345,10 +346,6 @@ class App:
         self.screen.fill((0,0,0))
         self.background.fill((0,0,0))
         self.fog_of_war.fill((0,0,0))
-
-
-        # pygame.draw.rect(self.background,(0,200,0),self.player.rect)
-        # pygame.draw.rect(self.fog_of_war,(0,0,0,0),self.player.rect)
 
         self.maze.draw(self.background)
 
@@ -428,7 +425,11 @@ class App:
         if self.on_init() == False:
             self._running = False
 
+        # stop the startscreen music and start the main game music
         pygame.mixer.music.stop()
+        pygame.mixer.music.set_volume(0.175)
+        pygame.mixer.music.load('Sounds/track2.wav')
+        pygame.mixer.music.play(-1)
 
         self.newChase = False
 

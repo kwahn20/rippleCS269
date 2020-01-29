@@ -40,12 +40,15 @@ def startscreen_wait():
     high_scores_clicked = make_button_click_trigger(x_range = (442, 570), y_range = (380, 430))
     credits_clicked     = make_button_click_trigger(x_range = (685, 812), y_range = (380, 430))
 
-     # load the music for the start screen and play on loop
+    # load the music for the start screen and play on loop
+    pygame.mixer.music.stop()
     pygame.mixer.music.load('track1.wav')
+    pygame.mixer.music.set_volume(0.95)
     pygame.mixer.music.play(-1)
     show_image(screen, startscreen_background)
 
     while True:
+
         events = pygame.event.get()
         keys = pygame.key.get_pressed()
         if keys[K_ESCAPE]: sys.exit()
