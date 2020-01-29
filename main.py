@@ -342,7 +342,6 @@ class App:
 
     def on_init(self):
         pygame.init()
-        pygame.mixer.init() # this is for sounds
 
         self.window = (self.windowWidth,self.windowHeight)
         self.screen = pygame.display.set_mode(self.window)
@@ -366,10 +365,6 @@ class App:
         self.screen.fill((0,0,0))
         self.background.fill((0,0,0))
         self.fog_of_war.fill((0,0,0))
-
-
-        # pygame.draw.rect(self.background,(0,200,0),self.player.rect)
-        # pygame.draw.rect(self.fog_of_war,(0,0,0,0),self.player.rect)
 
         self.maze.draw(self.background)
 
@@ -459,7 +454,11 @@ class App:
         if self.on_init() == False:
             self._running = False
 
+        # stop the startscreen music and start the main game music
         pygame.mixer.music.stop()
+        pygame.mixer.music.set_volume(0.175)
+        pygame.mixer.music.load('Sounds/track2.wav')
+        pygame.mixer.music.play(-1)
 
         self.newChase = False
 
