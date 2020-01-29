@@ -17,19 +17,6 @@ class Background(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.left, self.rect.top = [0,0]
 
-# # player must have which_steps field and sound_interval field
-# def play_steps(player):
-#     if player.sound_interval % 12 == 0:
-#         if player.which_step % 2 == 1:
-#             sounds.step_1_set_1.play()
-#             print('played step 1')
-#             player.which_step += 1
-#         else:
-#             sounds.step_2_set_1.play()
-#             print('played step 2')
-#             player.which_step += 1
-#     player.sound_interval += 1
-
 def show_image(screen, background_img):
     screen.fill((0,0,0))
     screen.blit(background_img.image, background_img.rect)
@@ -68,17 +55,6 @@ def startscreen_wait():
 def highscores_wait():
     back_clicked = make_button_click_trigger(x_range = (19, 128), y_range = (21, 83))
     show_image(screen, highscores_image)
-    while True:
-        events = pygame.event.get()
-        keys = pygame.key.get_pressed()
-        if keys[K_ESCAPE]: sys.exit()
-        if back_clicked(events):
-            show_image(screen, startscreen_background)
-            return()
-
-def credits_wait():
-    back_clicked = make_button_click_trigger(x_range = (19, 128), y_range = (21, 83))
-    show_image(screen, credits_background)
     while True:
         events = pygame.event.get()
         keys = pygame.key.get_pressed()
