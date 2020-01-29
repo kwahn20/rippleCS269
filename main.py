@@ -435,7 +435,7 @@ class App:
                     pygame.draw.rect(self.background, self.maze.litWalls[i][2], pygame.Rect(x*self.maze.tileSize, y*self.maze.tileSize, self.maze.tileSize, self.maze.tileSize))
 
         # THIS IS FOG OF WAR
-        # self.background.blit(self.fog_of_war,(0,0))
+        self.background.blit(self.fog_of_war,(0,0))
 
         # self.screen.blit(pygame.transform.scale(self.background, (self.background.get_width()*2, self.background.get_height()*2)), (-self.player.x + self.window[0]/2, -self.player.y + self.window[1]/2))
         self.screen.blit(self.background, (-self.player.x + self.window[0]/2, -self.player.y + self.window[1]/2))
