@@ -24,10 +24,10 @@ class Player:
 
         self.image_rects = [
             # right
-            pygame.Rect(0, 0, 40, 40), 
+            pygame.Rect(0, 0, 40, 40),
 
             # left
-            pygame.Rect(0, 0, 40, 40), 
+            pygame.Rect(0, 0, 40, 40),
 
             # front
             pygame.Rect(0, 0, 40, 40)
@@ -44,11 +44,9 @@ class Player:
         if self.sound_interval % 12 == 0:
             if self.which_step % 2 == 1:
                 # sounds.step_1_set_1.play()
-                # print('played step 1')
                 self.which_step += 1
             else:
                 # sounds.step_2_set_1.play()
-                # print('played step 2')
                 self.which_step += 1
         self.sound_interval += 1
 
@@ -61,6 +59,7 @@ class Player:
     def moveLeft(self, tileSize):
         self.x = self.x - self.speed
         self.play_steps()
+
         self.rect = pygame.Rect(self.x - 15,self.y - 15, 30, 30)
         self.image_idx = 1
 
@@ -73,6 +72,7 @@ class Player:
     def moveDown(self, tileSize):
         self.y = self.y + self.speed
         self.play_steps()
+
         self.rect = pygame.Rect(self.x - 15,self.y - 15, 30, 30)
         self.image_idx = 2
 
@@ -131,42 +131,6 @@ class Guard:
             self.speed /= 1.5
         else:
             self.speed *= 1.5
-
-    def updatePosition(self, t_x, t_y):
-        # self.prevPos = [self.x, self.y]
-        # print(t_x, t_y, self.x, self.y)
-
-        if self.x < t_x - self.speed:
-            # print("Moved Right")
-            self.moveRight()
-            if self.x > t_x - self.speed:
-                self.x = t_x
-                return True
-            return False
-        elif self.x > t_x + self.speed:
-            # print("Moved Left")
-            self.moveLeft()
-            if self.x < t_x + self.speed:
-                self.x = t_x
-                return True
-            return False
-
-        if self.y < t_y - self.speed:
-            # print("Moved Down")
-            self.moveDown()
-            if self.y > t_y - self.speed:
-                self.y = t_y
-                return True
-            return False
-        elif self.y > t_y + self.speed:
-            # print("Moved Up")
-            self.moveUp()
-            if self.y < t_y + self.speed:
-                self.y = t_y
-                return True
-            return False
-        else:
-            self.y = t_y
 
 class Maze:
     def __init__(self, tileSize, maze):
@@ -227,6 +191,12 @@ class App:
                         wallCount += 1
                         if wallCount == 5:
                             break
+
+                    if self.maze.maze[int(t_x + (dir.x*count))][int(t_y + (dir.y*count))] == 8:
+                        self.maze.litWalls.append([int(t_x + (dir.x*count)), int(t_y + (dir.y*count)), (255, 0, 255), x, y, chase])
+                        wallCount += 1
+                        if wallCount == 5:
+                            break
                 except:
                     break
 
@@ -240,13 +210,22 @@ class App:
 
         for dir in self.unitcircle:
             count = 0
-            while count < max_tiles and self.maze.maze[int(t_x + (dir.x*count))][int(t_y + (dir.y*count))] != 1:
-                count += 1
-                try:
+            nine_count = 0
+            try:
+                tile_num = self.maze.maze[int(t_x + (dir.x*count))][int(t_y + (dir.y*count))]
+                while count < max_tiles and tile_num != 1:
+                    if tile_num == 9:
+                        nine_count += 1
+                    if nine_count == 2:
+                        break
+
+                    count += 1
                     if int(t_x + (dir.x*count)) == p_t_x and int(t_y + (dir.y*count)) == p_t_y:
                         return True
-                except:
-                    break
+
+                    tile_num = self.maze.maze[int(t_x + (dir.x*count))][int(t_y + (dir.y*count))]
+            except:
+                break
         return False
 
     def __init__(self):
@@ -378,8 +357,7 @@ class App:
                 self.guards[i].animation_idx ^= 1
                 self.guards[i].frame_count = 0
             self.guards[i].frame_count += 1
-            # print(self.guards[i].frame_count)
-            # pygame.draw.rect(self.background, (255, 128, 0), self.guards[i])
+
             idx = self.guards[i].image_idx
             width = self.guards[i].image_rects[idx][self.guards[i].animation_idx].w
             height = self.guards[i].image_rects[idx][self.guards[i].animation_idx].h
@@ -389,8 +367,8 @@ class App:
                 self.guards[i].image_rects[idx][self.guards[i].animation_idx]
             )
             self.fog_of_war.blit(
-                self.guards[i].images[idx], 
-                (self.guards[i].x-(width/2), self.guards[i].y-(height/2)), 
+                self.guards[i].images[idx],
+                (self.guards[i].x-(width/2), self.guards[i].y-(height/2)),
                 self.guards[i].image_rects[idx][self.guards[i].animation_idx]
             )
 
@@ -408,13 +386,6 @@ class App:
             (self.player.x - (width / 2), self.player.y - (height / 2)),
             self.player.image_rects[idx]
         )
-
-        # pygame.draw.circle(self.fog_of_war,(0,0,0,0),(self.player.x+22,self.player.y+22),100,0)
-        # for i in range(0, len(self.guards)):
-        #     # print(self.guards[i].x, self.guards[i].y)
-        #     pygame.draw.rect(self.fog_of_war,(0,0,0,0), self.guards[i].rect)
-
-        # print("player:", self.player.x, self.player.y)
 
         for i in range(len(self.maze.litWalls)):
             x = self.maze.litWalls[i][0]
@@ -453,8 +424,6 @@ class App:
                     self.guards.append(Guard(50*row + 50/4, 50*col + 50/4, 1, col, row))
                 if self.maze.maze[row][col] == 3:
                     self.player = Player(20*row, 20*col, 10, 30)
-                    print(self.player.y)
-                    print(self.maze.getTileCoords(self.player.x, self.player.y))
 
         if self.on_init() == False:
             self._running = False
@@ -468,7 +437,7 @@ class App:
             keys = pygame.key.get_pressed()
             self.maze.litWalls = []
 
-            self.pingAudioLines(self.player.x - self.player.rect.w / 2, self.player.y - self.player.rect.h / 2, (0,0,255), self.player.beingChased)
+            self.pingAudioLines(self.player.x - self.player.rect.w/2, self.player.y - self.player.rect.h/2, (0,0,255), self.player.beingChased)
 
 
             for guard in self.guards:
@@ -476,19 +445,13 @@ class App:
                 x = t_x * self.maze.tileSize
                 y = t_y * self.maze.tileSize
 
-                # print(t_x, t_y, guard.prevTile, self.maze.maze[t_x-1][t_y], self.maze.maze[t_x+1][t_y], self.maze.maze[t_x][t_y-1], self.maze.maze[t_x][t_y+1])
-
                 moved = False
-                # print(self.maze.getTileCoords(guard.y, guard.x), guard.x, guard.y)
-                # print(self.maze.getTileCoords(self.player.y, self.player.x), self.player.x, self.player.y)
 
                 if not guard.chasePlayer:
                     try:
                         if self.maze.maze[t_x-1][t_y] == 2 and (guard.prevTile[0] != t_x-1 or guard.prevTile[1] != t_y):
                             guard.moveLeft()
-
                             if self.maze.getTileCoords(guard.y, guard.x)[0] == t_x-1:
-                                # guard.x = (t_x-1)*self.maze.tileSize
                                 guard.prevTile = [t_x, t_y]
                             moved = True
                     except:
@@ -498,7 +461,6 @@ class App:
                         if self.maze.maze[t_x+1][t_y] == 2 and (guard.prevTile[0] != t_x+1 or guard.prevTile[1] != t_y) and not moved:
                             guard.moveRight()
                             if self.maze.getTileCoords(guard.y, guard.x)[0] == t_x+1:
-                                # guard.x = (t_x+1)*self.maze.tileSize
                                 guard.prevTile = [t_x, t_y]
                             moved = True
                     except:
@@ -506,13 +468,9 @@ class App:
 
                     try:
                         if self.maze.maze[t_x][t_y-1] == 2 and (guard.prevTile[0] != t_x or guard.prevTile[1] != t_y-1) and not moved:
-                            # guard.moveUp()
-                            # print(self.maze.getTileCoords(guard.y, guard.x)[1], t_y-1)
+                            guard.moveUp()
                             if self.maze.getTileCoords(guard.y, guard.x)[1] == t_y-1:
-                                guard.y = (t_y-1)*self.maze.tileSize
                                 guard.prevTile = [t_x, t_y]
-                            else:
-                                guard.moveUp()
                             moved = True
                     except:
                         pass
@@ -521,7 +479,6 @@ class App:
                         if self.maze.maze[t_x][t_y+1] == 2 and (guard.prevTile[0] != t_x or guard.prevTile[1] != t_y+1) and not moved:
                             guard.moveDown()
                             if self.maze.getTileCoords(guard.y, guard.x)[1] == t_y+1:
-                                # guard.y = (t_y+1)*self.maze.tileSize
                                 guard.prevTile = [t_x, t_y]
                             moved = True
                     except:
@@ -530,7 +487,15 @@ class App:
                     if not moved:
                         guard.moveBack()
 
-                self.pingAudioLines(guard.x, guard.y, (255,0,0))
+                idx = guard.image_idx
+                width = guard.image_rects[idx][guard.animation_idx].w
+                height = guard.image_rects[idx][guard.animation_idx].h
+
+                collisionRect = pygame.Rect(guard.x - width/2, guard.y - height/2, width, height)
+                if collisionRect.colliderect(self.player.rect):
+                    M.gameover_wait()
+
+                self.pingAudioLines(guard.x - width/2, guard.y - height/2, (255,0,0))
                 foundPlayer = self.searchForPlayer(guard.x, guard.y, self.player.x, self.player.y)
 
                 if foundPlayer or guard.chasePlayer:
@@ -590,15 +555,19 @@ class App:
                     self.player.toggleChase()
 
             coords = self.maze.getTileCoords(self.player.y, self.player.x)
-            print(coords)
-            # print(len(self.maze.maze))
-            # print(len(self.maze.maze[0]))
-            #
-            # if self.maze.maze[coords[0]][coords[1]] == 7:
-            #     self.currentStage = self.GameState.nextLevel()
-            #     self.newMaze = self.currentStage.maze
-            #     self.maze = Maze(60/3, self.newMaze)
-            #     self.on_execute()
+
+            if self.maze.maze[coords[0]][coords[1]] == 7:
+                self.currentStage = self.GameState.nextLevel()
+                self.newMaze = self.currentStage.maze
+                self.maze = Maze(self.maze.tileSize, self.newMaze)
+                self.guards = []
+                for row in range(0, len(self.maze.maze)):
+                    for col in range(0, len(self.maze.maze[row])):
+                        if self.maze.maze[row][col] == 6:
+                            self.maze.maze[row][col] = 2
+                            self.guards.append(Guard(self.maze.tileSize*row + self.maze.tileSize/4, self.maze.tileSize*col + self.maze.tileSize/4, 1, col, row))
+                self.on_execute()
+
             if (keys[K_ESCAPE]):
                 self._running = False
 
