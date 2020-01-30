@@ -599,7 +599,7 @@ class Outro:
 
 class GameState:
     def __init__(self):
-        self.currentStage = 8
+        self.currentStage = 0
         self.user = ""
         self.stageList = [Stage1(), Stage2(), Stage3(), Stage4(), Stage5(), Stage6(), Stage7(), Stage8(), Stage9(), Stage10()]
     def nextLevel(self):
@@ -608,9 +608,16 @@ class GameState:
             return M.outro1_wait()
         return self.stageList[self.currentStage]
     def saveGame(self):
-        self.file = open("saveData.txt", "a")
-        self.saveInfo = [self.currentStage, self.user]
-        self.file.write(str(self.saveInfo)+"\n")
+        self.file = open("saveData.txt", "r")
+        for line in self.file.readlines():
+            print(line)
+            if self.user in line[1]:
+                pass
+            else:
+                self.file.close()
+                self.file = open("saveData.txt", "a")
+                self.saveInfo = [self.currentStage, self.user]
+                self.file.write(str(self.saveInfo)+"\n")
         self.file.close()
     def loadGame(self, saveFileNum):
         self.file = open("saveData.txt", "r")
