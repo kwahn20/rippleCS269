@@ -141,9 +141,15 @@ def startscreen_wait():
         lookfor_exit(events)
         if new_game_clicked(events): return entername_wait()
         if resume_game_clicked(events): return resume_wait()
-        if high_scores_clicked(events): highscores_wait()
-        if credits_clicked(events): credits_wait()
-        if howTo_clicked(events): howTo_wait()
+        if high_scores_clicked(events):
+            highscores_wait()
+            show_image(screen, startscreen_background)
+        if credits_clicked(events):
+            credits_wait()
+            show_image(screen, startscreen_background)
+        if howTo_clicked(events):
+            howTo_wait()
+            show_image(screen, startscreen_background)
 
 def entername_wait():
     continue_clicked = make_button_click_trigger(x_range = (332,639), y_range=(390,457))
@@ -275,7 +281,7 @@ def highscores_wait():
         events = pygame.event.get()
         lookfor_exit(events)
         if back_clicked(events):
-            return startscreen_wait()
+            return()#startscreen_wait()
 
 def credits_wait():
     back_clicked = make_button_click_trigger(x_range = (19, 128), y_range = (21, 83))
@@ -284,7 +290,7 @@ def credits_wait():
         events = pygame.event.get()
         lookfor_exit(events)
         if back_clicked(events):
-            return startscreen_wait()
+            return()
 
 def howTo_wait():
     back_clicked = make_button_click_trigger(x_range = (19, 128), y_range = (21, 83))
@@ -293,7 +299,7 @@ def howTo_wait():
         events = pygame.event.get()
         lookfor_exit(events)
         if back_clicked(events):
-            return startscreen_wait()
+            return()
 
 def gameover_wait(app):
     back_clicked = make_button_click_trigger(x_range = (19, 128), y_range = (21, 83))
