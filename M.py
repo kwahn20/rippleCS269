@@ -14,6 +14,7 @@ GAMEOVER = 'images/GameOver.png'
 HOWTO = 'images/HowTo-2.png'
 username = ""
 
+# some janky code for a Timer object from michael coyne's incredible freshman year project
 class Timer(object):
     '''keeps track of time and displays it on screen'''
     def __init__(self, initial_time):
@@ -97,8 +98,8 @@ def make_button_click_trigger(x_range, y_range):
 def startscreen_wait():
     new_game_clicked    = make_button_click_trigger(x_range = (190, 312), y_range = (380, 430))
     high_scores_clicked = make_button_click_trigger(x_range = (442, 570), y_range = (380, 430))
-    credits_clicked     = make_button_click_trigger(x_range = (573, 813), y_range = (380, 430))
-    howTo_clicked       = make_button_click_trigger(x_range = (800, 915), y_range = (380, 430))
+    credits_clicked     = make_button_click_trigger(x_range = (685, 813), y_range = (380, 430))
+    howTo_clicked       = make_button_click_trigger(x_range = (570, 685), y_range = (380, 430))
     # load the music for the start screen and play on loop
     pygame.mixer.music.stop()
     pygame.mixer.music.load('track1.wav')
@@ -107,7 +108,7 @@ def startscreen_wait():
     show_image(screen, startscreen_background)
 
     while True:
-
+        print(pygame.mouse.get_pos())
         events = pygame.event.get()
         keys = pygame.key.get_pressed()
         if keys[K_ESCAPE]: sys.exit()
@@ -196,14 +197,14 @@ def credits_wait():
             return()
 
 def howTo_wait():
-    back_clicked = make_button_click_trigger(x_range = (19, 128), y_range = (21, 83))
+    back_clicked = make_button_click_trigger(x_range = (0, 1000), y_range = (0, 563))
     show_image(screen, howTo_background)
     while True:
         events = pygame.event.get()
         keys = pygame.key.get_pressed()
         if keys[K_ESCAPE]: sys.exit()
         if back_clicked(events):
-            show_image(screen, howTo_background)
+            show_image(screen, startscreen_background)
             return()
 
 def gameover_wait():
