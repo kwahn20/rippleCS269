@@ -164,19 +164,21 @@ class Maze:
         for i in range(0, self.N):
             for j in range(0, self.M):
                 if self.maze[i][j] == 1:
-                    self.walls.append(pygame.Rect(i*self.tileSize, j*self.tileSize, self.tileSize, self.tileSize))
+                    self.walls.append([pygame.Rect(i*self.tileSize, j*self.tileSize, self.tileSize, self.tileSize), (0, 128, 255)])
+                if self.maze[i][j] == 4:
+                    self.walls.append([pygame.Rect(i*self.tileSize, j*self.tileSize, self.tileSize, self.tileSize), (255, 0, 255)])
 
     def getTileCoords(self, x, y):
         return (int(y/self.tileSize), int(x/self.tileSize))
 
     def draw(self, background):
         for i in range(0, len(self.walls)):
-            pygame.draw.rect(background, (0, 128, 255), self.walls[i])
+            pygame.draw.rect(background, self.walls[i][1], self.walls[i][0])
 
 class App:
     def collision(self, player, walls):
         for i in range(0, len(walls)):
-            if player.colliderect(walls[i]):
+            if player.colliderect(walls[i][0]):
                 return True
         return False
 
@@ -195,8 +197,14 @@ class App:
                         if wallCount == 5:
                             break
 
-                    if self.maze.maze[int(t_x + (dir.x*count))][int(t_y + (dir.y*count))] == 8:
-                        self.maze.litWalls.append([int(t_x + (dir.x*count)), int(t_y + (dir.y*count)), (255, 0, 255), x, y, chase])
+                    if self.maze.maze[int(t_x + (dir.x*count))][int(t_y + (dir.y*count))] == 7:
+                        self.maze.litWalls.append([int(t_x + (dir.x*count)), int(t_y + (dir.y*count)), (0, 200, 0), x, y, chase])
+                        wallCount += 1
+                        if wallCount == 5:
+                            break
+
+                    if self.maze.maze[int(t_x + (dir.x*count))][int(t_y + (dir.y*count))] == 4:
+                        self.maze.litWalls.append([int(t_x + (dir.x*count)), int(t_y + (dir.y*count)), (127, 0, 255), x, y, chase])
                         wallCount += 1
                         if wallCount == 5:
                             break
@@ -270,9 +278,9 @@ class App:
                      [1, 1, 1, 9, 9, 9, 9, 0, 9, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 9, 9, 9, 9, 9, 9, 9, 9, 9, 1, 1, 1],
                      [1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1],
                      [1, 1, 1, 9, 0, 9, 9, 9, 9, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 9, 9, 9, 9, 0, 9, 9, 9, 9, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1],
-                     [9, 7, 9, 9, 0, 9, 1, 1, 1, 9, 9, 9, 1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 9, 0, 9, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 9, 9, 9],
-                     [0, 7, 0, 0, 0, 9, 1, 1, 1, 9, 0, 9, 1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 9, 0, 9, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0],
-                     [9, 7, 9, 9, 0, 9, 1, 1, 1, 9, 0, 9, 1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 9, 0, 9, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 9, 9, 9],
+                     [9, 7, 9, 9, 0, 9, 1, 1, 1, 9, 9, 9, 1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 9, 0, 9, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 9, 9, 4],
+                     [0, 7, 0, 0, 0, 9, 1, 1, 1, 9, 0, 9, 1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 9, 0, 9, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 3, 9, 4],
+                     [9, 7, 9, 9, 0, 9, 1, 1, 1, 9, 0, 9, 1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 9, 0, 9, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 9, 9, 4],
                      [1, 1, 1, 9, 0, 9, 1, 1, 1, 9, 0, 9, 1, 1, 1, 9, 0, 0, 0, 0, 9, 9, 9, 9, 1, 1, 1, 9, 0, 9, 1, 1, 1, 9, 9, 9, 9, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1],
                      [1, 1, 1, 9, 0, 9, 1, 1, 1, 9, 0, 9, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 9, 0, 9, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1],
                      [1, 1, 1, 9, 0, 9, 1, 1, 1, 9, 9, 9, 1, 1, 1, 9, 0, 9, 9, 9, 9, 9, 0, 9, 1, 1, 1, 9, 9, 9, 1, 1, 1, 9, 0, 0, 0, 0, 9, 9, 9, 9, 9, 9, 9, 1, 1, 1],
@@ -388,7 +396,7 @@ class App:
             x = self.maze.litWalls[i][0]
             y = self.maze.litWalls[i][1]
 
-            if self.maze.maze[x][y] == 1:
+            if self.maze.maze[x][y] == 1 or self.maze.maze[x][y] == 4 or self.maze.maze[x][y] == 7:
                 p_x, p_y = self.maze.getTileCoords(self.maze.litWalls[i][4]+22, self.maze.litWalls[i][3]+22)
 
                 max_distance = 5.0
