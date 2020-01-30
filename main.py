@@ -303,7 +303,6 @@ class App:
         self.screen.fill((0,0,0))
         self.background.fill((0,0,0))
         self.fog_of_war.fill((0,0,0))
-
         self.maze.draw(self.background)
 
         for i in range(0, len(self.guards)):
@@ -364,13 +363,20 @@ class App:
 
         # self.screen.blit(pygame.transform.scale(self.background, (self.background.get_width()*2, self.background.get_height()*2)), (-self.player.x + self.window[0]/2, -self.player.y + self.window[1]/2))
         self.screen.blit(self.background, (-self.player.x + self.window[0]/2, -self.player.y + self.window[1]/2))
-
+        
+        # FOR DISPLAYING AND UPDATING THE TIMER
+        self.timer.update(pygame.time.get_ticks())
+        self.screen.blit(self.timer.image, self.timer.rect)
+        self.background.blit(self.timer.image, self.timer.rect)
+        self.fog_of_war.blit(self.timer.image, self.timer.rect)
+        
         pygame.display.flip()
 
     def on_cleanup(self):
         pygame.quit()
 
     def on_execute(self):
+        self.timer = M.Timer(pygame.time.get_ticks())
         for row in range(0, len(self.maze.maze)):
             for col in range(0, len(self.maze.maze[row])):
                 if self.maze.maze[row][col] == 6:

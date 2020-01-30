@@ -13,6 +13,60 @@ CREDITS = 'images/Credits.png'
 GAMEOVER = 'images/GameOver.png'
 username = ""
 
+class Timer(object):
+    '''keeps track of time and displays it on screen'''
+    def __init__(self, initial_time):
+        self._font = pygame.font.SysFont('trebuchet', 50)
+        self._initial_time = initial_time
+        self._current_time = 0
+        self._display_time = 0
+        self.display_text = ''
+        self.image = self._font.render(self.display_text, True, (255,255,255)) # creates a new surface with text on it
+        self.rect = self.image.get_rect()
+        self.rect.left = 450
+        self.rect.top = 20
+
+    @property
+    def current_time(self):
+        return self._current_time
+    @current_time.setter
+    def current_time(self, new_time):
+        self._current_time = new_time
+
+    @property
+    def initial_time(self):
+        return self._initial_time
+    @initial_time.setter
+    def initial_time(self, new_time):
+        self._initial_time = new_time
+
+    @property
+    def display_time(self):
+        return self._display_time
+    @display_time.setter
+    def display_time(self, new_time):
+        self._display_time = new_time
+
+    def reset(self, new_initial_time):
+        '''reset the timer'''
+        self.initial_time = new_initial_time
+
+    def update(self, ticks): # ticks is the return value from pygame.time.get_ticks()
+        '''update the current time, and set the image to the correct time so it can be drawn on screen'''
+        self.current_time = ticks
+        self.display_time = self.current_time - self.initial_time # display_time is in milliseconds
+        self.translate() # transforms display_time into readable display_text
+        self.image = self._font.render(self.display_text, 0, (255,255,255)) #creates a surface object with desired text
+
+    def translate(self): 
+        '''translate milisecond time to a readable stopwatch-esque time (ex: 2:30, which means 2 mins 30 seconds)'''
+        time_in_seconds = self.display_time // 1000 # calculate the time in seconds
+        time_in_minutes = str(time_in_seconds // 60) # the minutes to display on the clock
+        leftover_seconds = str(time_in_seconds % 60) # the seconds to display on the clock
+        if float(leftover_seconds) < 10: leftover_seconds = '0' + leftover_seconds # so the timer looks nice
+        self.display_text = time_in_minutes + ' : ' + leftover_seconds # set the display text for the timer
+
+
 # a class for background images such as the start screen, or any other images
 # that we want in the background (like a background for the game or whatnot)
 class Background(pygame.sprite.Sprite):
