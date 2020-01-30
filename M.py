@@ -230,10 +230,10 @@ def highscores_wait():
     back_clicked = make_button_click_trigger(x_range = (19, 128), y_range = (21, 83))
     show_image(screen, highscores_image)
     if(os.path.exists('highScoreData.txt')):
-        test = my_get_highscores()
-        print(test)
+
         hs1, hs2, hs3, hs4, hs5, *rest = my_get_highscores()
-        # display all the names and highscores
+
+        # display all the names and highscores (name first line, highscore second line)
         message_display(text = hs1[1], x = 253, y = 162, fontsize = 50)
         if hs1[0] != 0: message_display(text = 'F{} : {}s'.format(hs1[0], hs1[2]), x = 677, y = 162, fontsize = 40)
 
