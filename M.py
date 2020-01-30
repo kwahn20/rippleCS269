@@ -164,20 +164,23 @@ def entername_wait():
         pygame.display.flip()
 
 def resume_wait():
-    file = open("saveData.txt", "r")
-    app = main.App()
-    app.GameState.currentStage = int(file.read().split(",")[0][1])
+    try:
+        file = open("saveData.txt", "r")
+        app = main.App()
+        app.GameState.currentStage = int(file.read().split(",")[0][1])
 
-    app.maze = main.Maze(app.maze.tileSize, app.GameState.stageList[app.GameState.currentStage].maze)
+        app.maze = main.Maze(app.maze.tileSize, app.GameState.stageList[app.GameState.currentStage].maze)
+        app.GameState.user = "Player"
+        app.guards = []
+        for row in range(0, len(app.maze.maze)):
+            for col in range(0, len(app.maze.maze[row])):
+                if app.maze.maze[row][col] == 6:
+                    app.maze.maze[row][col] = 2
+                    app.guards.append(main.Guard(app.maze.tileSize*row + app.maze.tileSize/4, app.maze.tileSize*col + app.maze.tileSize/4, 5, col, row))
 
-    app.guards = []
-    for row in range(0, len(app.maze.maze)):
-        for col in range(0, len(app.maze.maze[row])):
-            if app.maze.maze[row][col] == 6:
-                app.maze.maze[row][col] = 2
-                app.guards.append(main.Guard(app.maze.tileSize*row + app.maze.tileSize/4, app.maze.tileSize*col + app.maze.tileSize/4, 5, col, row))
-
-    app.on_execute()
+        app.on_execute()
+    except:
+        pass
 
 def intro1_wait():
     continue_clicked = make_button_click_trigger(x_range=(0,1000), y_range=(0,563))
