@@ -91,6 +91,15 @@ def show_image(screen, background_img):
     screen.blit(background_img.image, background_img.rect)
     pygame.display.flip()
 
+def lookfor_exit(events):
+    for event in events:
+        if event.type == pygame.QUIT:
+            sys.exit()
+
+def esc_pressed(app):
+    startscreen_wait()
+    app.on_execute()
+
 # make a 'trigger' function for a button located in the given x and y range
 def make_button_click_trigger(x_range, y_range):
     def f(events):
@@ -116,10 +125,8 @@ def startscreen_wait():
     show_image(screen, startscreen_background)
 
     while True:
-        #print(pygame.mouse.get_pos())
         events = pygame.event.get()
-        keys = pygame.key.get_pressed()
-        if keys[K_ESCAPE]: sys.exit()
+        lookfor_exit(events)
         if new_game_clicked(events): return entername_wait()
         if high_scores_clicked(events): highscores_wait()
         if credits_clicked(events): credits_wait()
@@ -132,7 +139,7 @@ def entername_wait():
     hs_background = Background('images/NewHighScore.png')
     while True:
         events = pygame.event.get()
-        print(pygame.mouse.get_pos())
+        lookfor_exit(events)
         screen.fill((0,0,0))
         screen.blit(hs_background.image, hs_background.rect)
         textInput.update(events)
@@ -148,6 +155,7 @@ def intro1_wait():
     show_image(screen, Background("images/whereami.png") )
     while True:
         events = pygame.event.get()
+        lookfor_exit(events)
         if continue_clicked(events):
             return intro2_wait()
 
@@ -156,6 +164,7 @@ def intro2_wait():
     show_image(screen, Background("images/storydoorscene.png"))
     while True:
         events = pygame.event.get()
+        lookfor_exit(events)
         if continue_clicked(events):
             return intro3_wait()
 
@@ -164,6 +173,7 @@ def intro3_wait():
     show_image(screen, Background("images/Escape.png"))
     while True:
         events = pygame.event.get()
+        lookfor_exit(events)
         if continue_clicked(events):
             return()
 
@@ -172,6 +182,7 @@ def outro1_wait():
     show_image(screen, Background("images/tunnelLight.png"))
     while True:
         events = pygame.event.get()
+        lookfor_exit(events)
         if continue_clicked(events):
             return outro2_wait()
 
@@ -184,6 +195,7 @@ def outro2_wait():
     pygame.mixer.music.play(-1)
     while True:
         events = pygame.event.get()
+        lookfor_exit(events)
         if continue_clicked(events):
             Story.GameState.currentStage = 0
             return startscreen_wait()
@@ -193,8 +205,7 @@ def highscores_wait():
     show_image(screen, highscores_image)
     while True:
         events = pygame.event.get()
-        keys = pygame.key.get_pressed()
-        if keys[K_ESCAPE]: sys.exit()
+        lookfor_exit(events)
         if back_clicked(events):
             show_image(screen, startscreen_background)
             return()
@@ -204,8 +215,7 @@ def credits_wait():
     show_image(screen, credits_background)
     while True:
         events = pygame.event.get()
-        keys = pygame.key.get_pressed()
-        if keys[K_ESCAPE]: sys.exit()
+        lookfor_exit(events)
         if back_clicked(events):
             show_image(screen, startscreen_background)
             return()
@@ -215,8 +225,7 @@ def howTo_wait():
     show_image(screen, howTo_background)
     while True:
         events = pygame.event.get()
-        keys = pygame.key.get_pressed()
-        if keys[K_ESCAPE]: sys.exit()
+        lookfor_exit(events)
         if back_clicked(events):
             show_image(screen, startscreen_background)
             return()
@@ -230,8 +239,7 @@ def gameover_wait():
     pygame.mixer.music.play()
     while True:
         events = pygame.event.get()
-        keys = pygame.key.get_pressed()
-        if keys[K_ESCAPE]: sys.exit()
+        lookfor_exit(events)
         if back_clicked(events):
             Story.GameState.currentStage = 0
             app = main.App()
@@ -245,8 +253,7 @@ def pause_wait():
     show_image(screen, pause_background)
     while True:
         events = pygame.event.get()
-        keys = pygame.key.get_pressed()
-        if keys[K_ESCAPE]: sys.exit()
+        lookfor_exit(events)
         if main_clicked(events):
             Story.GameState.currentStage = 0
             app = main.App()
