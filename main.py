@@ -242,7 +242,7 @@ class App:
 
     def __init__(self):
         self.GameState = Story.GameState()
-        self.maze1 = Story.Stage1().maze
+        self.maze1 = self.GameState.stageList[self.GameState.currentStage].maze
 
         self._running = True
         self.windowWidth = 1000
@@ -251,10 +251,6 @@ class App:
         # self.windowHeight = 1080
         tileSize = 60/3
         self.pause = False
-        self.stage5 = Story.Stage5()
-        #print(len(self.stage5.maze))
-        # for line in self.stage5.maze:
-        #     print(len(line))
         self.maze = Maze(tileSize, self.maze1)
         self.unitcircle = []
 

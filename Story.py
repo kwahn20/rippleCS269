@@ -611,6 +611,8 @@ class GameState:
 
     def saveGame(self):
         self.old = []
+        if self.user == "":
+            self.user = "player"
         try:
             self.file = open("saveData.txt", "r")
             for line in self.file.readlines():
@@ -627,16 +629,17 @@ class GameState:
         self.saveInfo = [self.currentStage, self.user]
         if len(self.old) == 0:
             self.old = ""
-        self.file.write(str(self.old) + str(self.saveInfo)+"\n")
+        self.file.write(str(self.old) + str(self.saveInfo))
         self.file.close()
 
 
-    def loadGame(self, saveFileNum):
+    def loadGame(self):
         self.file = open("saveData.txt", "r")
-        self.loadInfo = self.file.read(saveFileNum)
-        self.currentStage = int(self.loadInfo.split(",")[0])
+        self.loadInfo = self.file.read()
+        self.currentStage = int(self.loadInfo.split(",")[0][1])
         self.user = self.loadInfo.split(",")[1]
         self.file.close()
+        return self.currentStage
 
     def createHighScore(self, time):
         self.file = open("highScoreData.txt", "r")
@@ -651,6 +654,7 @@ class GameState:
         open("highScoreData.txt", "w").close()
         self.file = open("highScoreData.txt", "w")
         self.file.writelines(self.highScores)
+        self.file.close()
 
     def getHighScores(self):
         self.file = open("highScoreData.txt", "r")

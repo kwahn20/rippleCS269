@@ -124,6 +124,7 @@ def make_button_click_trigger(x_range, y_range):
 
 def startscreen_wait():
     new_game_clicked    = make_button_click_trigger(x_range = (190, 312), y_range = (380, 430))
+    resume_game_clicked = make_button_click_trigger(x_range = (315, 440), y_range = (380, 430))
     high_scores_clicked = make_button_click_trigger(x_range = (442, 570), y_range = (380, 430))
     credits_clicked     = make_button_click_trigger(x_range = (690, 813), y_range = (380, 430))
     howTo_clicked       = make_button_click_trigger(x_range = (573, 685), y_range = (380, 430))
@@ -138,6 +139,7 @@ def startscreen_wait():
         events = pygame.event.get()
         lookfor_exit(events)
         if new_game_clicked(events): return entername_wait()
+        if resume_game_clicked(events): return resume_wait()
         if high_scores_clicked(events): highscores_wait()
         if credits_clicked(events): credits_wait()
         if howTo_clicked(events): howTo_wait()
@@ -159,6 +161,13 @@ def entername_wait():
             username = textInput.input_string
             return intro1_wait()
         pygame.display.flip()
+
+def resume_wait():
+    file = open("saveData.txt", "r")
+    Story.GameState.currentStage = int(file.read().split(",")[0][1])
+    Story.GameState.currentStage = 4
+    app = main.App()
+    app.on_execute()
 
 def intro1_wait():
     continue_clicked = make_button_click_trigger(x_range=(0,1000), y_range=(0,563))
