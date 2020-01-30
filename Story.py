@@ -602,32 +602,48 @@ class GameState:
         self.currentStage = 0
         self.user = ""
         self.stageList = [Stage1(), Stage2(), Stage3(), Stage4(), Stage5(), Stage6(), Stage7(), Stage8(), Stage9(), Stage10()]
+
     def nextLevel(self):
         self.currentStage += 1
         if self.currentStage == 10:
             return M.outro1_wait()
         return self.stageList[self.currentStage]
+
     def saveGame(self):
-        self.file = open("saveData.txt", "r")
-        self.old = []
-        for line in self.file.readlines():
-            if str(line).find(self.user):
-                pass
-            else:
-                self.old.append(line)
-        self.file.close()
+        try:
+            self.file = open("saveData.txt", "r")
+            self.old = []
+            for line in self.file.readlines():
+                if str(line).find(self.user):
+                    pass
+                else:
+                    self.old.append(line)
+            self.file.close()
+        except IOError:
+            self.file = open("saveData.txt","w")
+            self.old = []
+            for line in self.file.readlines():
+                if str(line).find(self.user):
+                    pass
+                else:
+                    self.old.append(line)
+            self.file.close()
+
         self.file = open("saveData.txt", "w")
         self.saveInfo = [self.currentStage, self.user]
         if len(self.old) == 0:
             self.old = ""
         self.file.write(str(self.old) + str(self.saveInfo)+"\n")
         self.file.close()
+
+
     def loadGame(self, saveFileNum):
         self.file = open("saveData.txt", "r")
         self.loadInfo = self.file.read(saveFileNum)
         self.currentStage = int(self.loadInfo.split(",")[0])
         self.user = self.loadInfo.split(",")[1]
         self.file.close()
+
     def createHighScore(self, time):
         self.file = open("highScoreData.txt", "r")
         self.highScores = self.file.readlines()
@@ -641,6 +657,7 @@ class GameState:
         open("highScoreData.txt", "w").close()
         self.file = open("highScoreData.txt", "w")
         self.file.writelines(self.highScores)
+
     def getHighScores(self):
         self.file = open("highScoreData.txt", "r")
         return self.file.readlines()[0:4]
