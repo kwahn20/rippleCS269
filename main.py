@@ -279,7 +279,7 @@ class App:
         self.window = (self.windowWidth,self.windowHeight)
         self.screen = pygame.display.set_mode(self.window)
 
-        self.fog_of_war = pygame.Surface((0, 0), pygame.SRCALPHA)
+        self.fog_of_war = pygame.Surface((2000, 2000), pygame.SRCALPHA)
         self.background = pygame.Surface((2000, 2000))
         self.screen.blit(self.background,(0,0))
 
