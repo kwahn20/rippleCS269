@@ -56,7 +56,7 @@ class Timer(object):
     def resume(self):
         self.reset()
         self.displaytime += self.pausedtime
-        
+
     def reset(self, new_initial_time):
         '''reset the timer'''
         self.initial_time = new_initial_time
@@ -126,20 +126,22 @@ def startscreen_wait():
         if howTo_clicked(events): howTo_wait()
 
 def entername_wait():
-    #back_clicked = make_button_click_trigger(x_range = (19, 128), y_range= (21,83))
     continue_clicked = make_button_click_trigger(x_range = (332,639), y_range=(390,457))
     textInput = TextInput.TextInput()
     textInput.text_color = (255,255,255)
-    show_image(screen, Background("images/NewHighScore.png"))
+    hs_background = Background('images/NewHighScore.png')
     while True:
-        screen.fill((0,0,0))
         events = pygame.event.get()
+        print(pygame.mouse.get_pos())
+        screen.fill((0,0,0))
+        screen.blit(hs_background.image, hs_background.rect)
         textInput.update(events)
-        screen.blit(textInput.get_surface(), (0, 0))
+        screen.blit(textInput.get_surface(), (529, 220))
         if continue_clicked(events):
             global username
             username = textInput.input_string
             return intro1_wait()
+        pygame.display.flip()
 
 def intro1_wait():
     continue_clicked = make_button_click_trigger(x_range=(0,1000), y_range=(0,563))
