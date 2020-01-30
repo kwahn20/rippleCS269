@@ -11,6 +11,7 @@ START_SCREEN = 'images/titlescreen.png'
 HIGHSCORES = 'images/HighScores.png'
 CREDITS = 'images/Credits.png'
 GAMEOVER = 'images/GameOver.png'
+HOWTO = 'images/HowTo-2.png'
 username = ""
 
 class Timer(object):
@@ -96,8 +97,8 @@ def make_button_click_trigger(x_range, y_range):
 def startscreen_wait():
     new_game_clicked    = make_button_click_trigger(x_range = (190, 312), y_range = (380, 430))
     high_scores_clicked = make_button_click_trigger(x_range = (442, 570), y_range = (380, 430))
-    credits_clicked     = make_button_click_trigger(x_range = (685, 812), y_range = (380, 430))
-
+    credits_clicked     = make_button_click_trigger(x_range = (573, 813), y_range = (380, 430))
+    howTo_clicked       = make_button_click_trigger(x_range = (800, 915), y_range = (380, 430))
     # load the music for the start screen and play on loop
     pygame.mixer.music.stop()
     pygame.mixer.music.load('track1.wav')
@@ -113,6 +114,7 @@ def startscreen_wait():
         if new_game_clicked(events): return entername_wait()
         if high_scores_clicked(events): highscores_wait()
         if credits_clicked(events): credits_wait()
+        if howTo_clicked(events): howTo_wait()
 
 def entername_wait():
     #back_clicked = make_button_click_trigger(x_range = (19, 128), y_range= (21,83))
@@ -193,6 +195,17 @@ def credits_wait():
             show_image(screen, startscreen_background)
             return()
 
+def howTo_wait():
+    back_clicked = make_button_click_trigger(x_range = (19, 128), y_range = (21, 83))
+    show_image(screen, howTo_background)
+    while True:
+        events = pygame.event.get()
+        keys = pygame.key.get_pressed()
+        if keys[K_ESCAPE]: sys.exit()
+        if back_clicked(events):
+            show_image(screen, howTo_background)
+            return()
+
 def gameover_wait():
     back_clicked = make_button_click_trigger(x_range = (19, 128), y_range = (21, 83))
     show_image(screen, gameover_background)
@@ -212,6 +225,7 @@ startscreen_background = Background(START_SCREEN)
 highscores_image = Background(HIGHSCORES)
 credits_background = Background(CREDITS)
 gameover_background = Background(GAMEOVER)
+howTo_background = Background(HOWTO)
 
 if(__name__ == '__main__'):
     pass
