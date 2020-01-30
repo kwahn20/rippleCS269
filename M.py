@@ -169,6 +169,10 @@ def outro1_wait():
 def outro2_wait():
     continue_clicked = make_button_click_trigger(x_range=(0, 1000), y_range=(0, 563))
     show_image(screen, Background("images/endScene.png"))
+    pygame.mixer.music.stop()
+    pygame.mixer.music.load('Sounds/win noise.wav')
+    pygame.mixer.music.set_volume(0.95)
+    pygame.mixer.music.play(-1)
     while True:
         events = pygame.event.get()
         if continue_clicked(events):
@@ -211,6 +215,10 @@ def howTo_wait():
 def gameover_wait():
     back_clicked = make_button_click_trigger(x_range = (19, 128), y_range = (21, 83))
     show_image(screen, gameover_background)
+    pygame.mixer.music.stop()
+    pygame.mixer.music.load('Sounds/lose noise.wav')
+    pygame.mixer.music.set_volume(0.95)
+    pygame.mixer.music.play()
     while True:
         events = pygame.event.get()
         keys = pygame.key.get_pressed()
