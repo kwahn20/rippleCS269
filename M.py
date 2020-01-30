@@ -164,9 +164,18 @@ def entername_wait():
 
 def resume_wait():
     file = open("saveData.txt", "r")
-    Story.GameState.currentStage = int(file.read().split(",")[0][1])
-    Story.GameState.currentStage = 4
     app = main.App()
+    app.GameState.currentStage = int(file.read().split(",")[0][1])
+
+    app.maze = main.Maze(app.maze.tileSize, app.GameState.stageList[app.GameState.currentStage].maze)
+
+    app.guards = []
+    for row in range(0, len(app.maze.maze)):
+        for col in range(0, len(app.maze.maze[row])):
+            if app.maze.maze[row][col] == 6:
+                app.maze.maze[row][col] = 2
+                app.guards.append(main.Guard(app.maze.tileSize*row + app.maze.tileSize/4, app.maze.tileSize*col + app.maze.tileSize/4, 5, col, row))
+
     app.on_execute()
 
 def intro1_wait():
@@ -257,7 +266,7 @@ def highscores_wait():
 
         message_display(text = hs5[1], x = 253, y = 456, fontsize = 50)
         if hs5[0] != 0: message_display(text = 'F{} : {}s'.format(hs5[0], hs5[2]), x = 677, y = 456, fontsize = 40)
-        
+
     while True:
         events = pygame.event.get()
         lookfor_exit(events)
