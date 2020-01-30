@@ -12,7 +12,7 @@ START_SCREEN = 'images/titlescreen.png'
 HIGHSCORES = 'images/HighScores.png'
 CREDITS = 'images/Credits.png'
 GAMEOVER = 'images/GameOver.png'
-HOWTO = 'images/HowTo-2.png'
+HOWTO = 'images/HowTo-3.png'
 username = ""
 PAUSE = "images/GamePause.png"
 
@@ -128,6 +128,7 @@ def startscreen_wait():
     high_scores_clicked = make_button_click_trigger(x_range = (442, 570), y_range = (380, 430))
     credits_clicked     = make_button_click_trigger(x_range = (690, 813), y_range = (380, 430))
     howTo_clicked       = make_button_click_trigger(x_range = (573, 685), y_range = (380, 430))
+    resume_game_clicked = make_button_click_trigger(x_range = (315, 440), y_range = (380, 430))
     # load the music for the start screen and play on loop
     pygame.mixer.music.stop()
     pygame.mixer.music.load('track1.wav')
