@@ -140,7 +140,9 @@ def startscreen_wait():
         events = pygame.event.get()
         lookfor_exit(events)
         if new_game_clicked(events): return entername_wait()
-        if resume_game_clicked(events): return resume_wait()
+        if resume_game_clicked(events):
+            resume_wait()
+            sys.exit()
         if high_scores_clicked(events):
             highscores_wait()
             show_image(screen, startscreen_background)
