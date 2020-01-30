@@ -12,7 +12,7 @@ START_SCREEN = 'images/titlescreen.png'
 HIGHSCORES = 'images/HighScores.png'
 CREDITS = 'images/Credits.png'
 GAMEOVER = 'images/GameOver.png'
-HOWTO = 'images/HowTo-2.png'
+HOWTO = 'images/HowTo-3.png'
 username = ""
 PAUSE = "images/GamePause.png"
 
@@ -124,9 +124,11 @@ def make_button_click_trigger(x_range, y_range):
 
 def startscreen_wait():
     new_game_clicked    = make_button_click_trigger(x_range = (190, 312), y_range = (380, 430))
+    resume_game_clicked = make_button_click_trigger(x_range = (315, 440), y_range = (380, 430))
     high_scores_clicked = make_button_click_trigger(x_range = (442, 570), y_range = (380, 430))
     credits_clicked     = make_button_click_trigger(x_range = (690, 813), y_range = (380, 430))
     howTo_clicked       = make_button_click_trigger(x_range = (573, 685), y_range = (380, 430))
+    resume_game_clicked = make_button_click_trigger(x_range = (315, 440), y_range = (380, 430))
     # load the music for the start screen and play on loop
     pygame.mixer.music.stop()
     pygame.mixer.music.load('track1.wav')
@@ -138,6 +140,7 @@ def startscreen_wait():
         events = pygame.event.get()
         lookfor_exit(events)
         if new_game_clicked(events): return entername_wait()
+        if resume_game_clicked(events): return resume_wait()
         if high_scores_clicked(events): highscores_wait()
         if credits_clicked(events): credits_wait()
         if howTo_clicked(events): howTo_wait()
@@ -159,6 +162,22 @@ def entername_wait():
             username = textInput.input_string
             return intro1_wait()
         pygame.display.flip()
+
+def resume_wait():
+    file = open("saveData.txt", "r")
+    app = main.App()
+    app.GameState.currentStage = int(file.read().split(",")[0][1])
+
+    app.maze = main.Maze(app.maze.tileSize, app.GameState.stageList[app.GameState.currentStage].maze)
+
+    app.guards = []
+    for row in range(0, len(app.maze.maze)):
+        for col in range(0, len(app.maze.maze[row])):
+            if app.maze.maze[row][col] == 6:
+                app.maze.maze[row][col] = 2
+                app.guards.append(main.Guard(app.maze.tileSize*row + app.maze.tileSize/4, app.maze.tileSize*col + app.maze.tileSize/4, 5, col, row))
+
+    app.on_execute()
 
 def intro1_wait():
     continue_clicked = make_button_click_trigger(x_range=(0,1000), y_range=(0,563))
@@ -248,7 +267,7 @@ def highscores_wait():
 
         message_display(text = hs5[1], x = 253, y = 456, fontsize = 50)
         if hs5[0] != 0: message_display(text = 'F{} : {}s'.format(hs5[0], hs5[2]), x = 677, y = 456, fontsize = 40)
-        
+
     while True:
         events = pygame.event.get()
         lookfor_exit(events)
