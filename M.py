@@ -14,6 +14,7 @@ GAMEOVER = 'images/GameOver.png'
 HOWTO = 'images/HowTo-2.png'
 username = ""
 
+# some janky code for a Timer object from michael coyne's incredible freshman year project
 class Timer(object):
     '''keeps track of time and displays it on screen'''
     def __init__(self, initial_time):
@@ -107,7 +108,7 @@ def startscreen_wait():
     show_image(screen, startscreen_background)
 
     while True:
-
+        print(pygame.mouse.get_pos())
         events = pygame.event.get()
         keys = pygame.key.get_pressed()
         if keys[K_ESCAPE]: sys.exit()
