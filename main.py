@@ -275,16 +275,16 @@ class App:
             for col in range(0, len(self.maze.maze[row])):
                 if self.maze.maze[row][col] == 6:
                     self.maze.maze[row][col] = 2
-                    self.guards.append(Guard(tileSize*row + tileSize/4, tileSize*col + tileSize/4, 1, col, row))
+                    self.guards.append(Guard(tileSize*row + tileSize/4, tileSize*col + tileSize/4, 10, col, row))
                 if self.maze.maze[row][col] == 3:
-                    self.player = Player(tileSize*row, tileSize*col, 2, 3*tileSize/2)
+                    self.player = Player(tileSize*row, tileSize*col, 10, 3*tileSize/2)
 
     def on_init(self):
         pygame.init()
         self.window = (self.windowWidth,self.windowHeight)
         self.screen = pygame.display.set_mode(self.window)
 
-        self.fog_of_war = pygame.Surface((2000, 2000), pygame.SRCALPHA)
+        self.fog_of_war = pygame.Surface((0, 0), pygame.SRCALPHA)
         self.background = pygame.Surface((2000, 2000))
         self.screen.blit(self.background,(0,0))
 
@@ -451,7 +451,7 @@ class App:
 
                 collisionRect = pygame.Rect(guard.x - width/2, guard.y - height/2, width, height)
                 if collisionRect.colliderect(self.player.rect):
-                    M.gameover_wait(self)
+                    M.gameover_wait()
 
 
                 self.pingAudioLines(guard.x - width/2, guard.y - height/2, (255,0,0))
@@ -524,7 +524,7 @@ class App:
                     for col in range(0, len(self.maze.maze[row])):
                         if self.maze.maze[row][col] == 6:
                             self.maze.maze[row][col] = 2
-                            self.guards.append(Guard(self.maze.tileSize*row + self.maze.tileSize/4, self.maze.tileSize*col + self.maze.tileSize/4, 1, col, row))
+                            self.guards.append(Guard(self.maze.tileSize*row + self.maze.tileSize/4, self.maze.tileSize*col + self.maze.tileSize/4, 10, col, row))
                 self.GameState.user = M.username
                 self.GameState.saveGame()
                 self.on_execute()

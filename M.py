@@ -4,6 +4,7 @@ import sounds
 import time
 from pygame.locals import *
 import Story
+import main
 import pygame_textinput as TextInput
 
 START_SCREEN = 'images/titlescreen.png'
@@ -138,7 +139,7 @@ def credits_wait():
             show_image(screen, startscreen_background)
             return()
 
-def gameover_wait(app):
+def gameover_wait():
     back_clicked = make_button_click_trigger(x_range = (19, 128), y_range = (21, 83))
     show_image(screen, gameover_background)
     while True:
@@ -146,6 +147,8 @@ def gameover_wait(app):
         keys = pygame.key.get_pressed()
         if keys[K_ESCAPE]: sys.exit()
         if back_clicked(events):
+            Story.GameState.currentStage = 0
+            app = main.App()
             startscreen_wait()
             app.on_execute()
 
