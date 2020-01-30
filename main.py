@@ -137,8 +137,8 @@ class Guard:
 
 class Maze:
     def __init__(self, tileSize, maze):
-        self.M = 16*3
-        self.N = 16*3
+        self.M = len(maze)
+        self.N = len(maze[0])
         self.maze = maze
         self.maze = [list(i) for i in zip(*self.maze)]
         # [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
