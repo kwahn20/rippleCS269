@@ -609,15 +609,18 @@ class GameState:
         return self.stageList[self.currentStage]
     def saveGame(self):
         self.file = open("saveData.txt", "r")
+        self.old = []
         for line in self.file.readlines():
-            print(line)
-            if self.user in line[1]:
+            if str(line).find(self.user):
                 pass
             else:
-                self.file.close()
-                self.file = open("saveData.txt", "a")
-                self.saveInfo = [self.currentStage, self.user]
-                self.file.write(str(self.saveInfo)+"\n")
+                self.old.append(line)
+        self.file.close()
+        self.file = open("saveData.txt", "w")
+        self.saveInfo = [self.currentStage, self.user]
+        if len(self.old) == 0:
+            self.old = ""
+        self.file.write(str(self.old) + str(self.saveInfo)+"\n")
         self.file.close()
     def loadGame(self, saveFileNum):
         self.file = open("saveData.txt", "r")
