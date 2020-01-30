@@ -3,11 +3,14 @@ import sys
 import sounds
 import time
 from pygame.locals import *
+import Story
+import pygame_textinput as TextInput
 
 START_SCREEN = 'images/titlescreen.png'
 HIGHSCORES = 'images/HighScores.png'
 CREDITS = 'images/Credits.png'
 GAMEOVER = 'images/GameOver.png'
+username = ""
 
 # a class for background images such as the start screen, or any other images
 # that we want in the background (like a background for the game or whatnot)
@@ -52,9 +55,66 @@ def startscreen_wait():
         events = pygame.event.get()
         keys = pygame.key.get_pressed()
         if keys[K_ESCAPE]: sys.exit()
-        if new_game_clicked(events): return()
+        if new_game_clicked(events): return entername_wait()
         if high_scores_clicked(events): highscores_wait()
         if credits_clicked(events): credits_wait()
+
+def entername_wait():
+    #back_clicked = make_button_click_trigger(x_range = (19, 128), y_range= (21,83))
+    continue_clicked = make_button_click_trigger(x_range = (332,639), y_range=(390,457))
+    textInput = TextInput.TextInput()
+    textInput.text_color = (255,255,255)
+    show_image(screen, Background("images/NewHighScore.png"))
+    while True:
+        screen.fill((0,0,0))
+        events = pygame.event.get()
+        textInput.update(events)
+        screen.blit(textInput.get_surface(), (0, 0))
+        if continue_clicked(events):
+            global username
+            username = textInput.input_string
+            return intro1_wait()
+
+def intro1_wait():
+    continue_clicked = make_button_click_trigger(x_range=(0,1000), y_range=(0,563))
+    show_image(screen, Background("images/whereami.png") )
+    while True:
+        events = pygame.event.get()
+        if continue_clicked(events):
+            return intro2_wait()
+
+def intro2_wait():
+    continue_clicked = make_button_click_trigger(x_range=(0, 1000), y_range=(0, 563))
+    show_image(screen, Background("images/storydoorscene.png"))
+    while True:
+        events = pygame.event.get()
+        if continue_clicked(events):
+            return intro3_wait()
+
+def intro3_wait():
+    continue_clicked = make_button_click_trigger(x_range=(0, 1000), y_range=(0, 563))
+    show_image(screen, Background("images/Escape.png"))
+    while True:
+        events = pygame.event.get()
+        if continue_clicked(events):
+            return()
+
+def outro1_wait():
+    continue_clicked = make_button_click_trigger(x_range=(0, 1000), y_range=(0, 563))
+    show_image(screen, Background("images/tunnelLight.png"))
+    while True:
+        events = pygame.event.get()
+        if continue_clicked(events):
+            return outro2_wait()
+
+def outro2_wait():
+    continue_clicked = make_button_click_trigger(x_range=(0, 1000), y_range=(0, 563))
+    show_image(screen, Background("images/endScene.png"))
+    while True:
+        events = pygame.event.get()
+        if continue_clicked(events):
+            Story.GameState.currentStage = 0
+            return startscreen_wait()
 
 def highscores_wait():
     back_clicked = make_button_click_trigger(x_range = (19, 128), y_range = (21, 83))
