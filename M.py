@@ -282,15 +282,14 @@ def gameover_wait(app):
     pygame.mixer.music.play()
 
     time_took_to_finish = app.timer.display_time // 1000
-    level = Story.GameState.currentStage
+    level = app.GameState.currentStage
 
-    message_display(text = 'Level {} : {} s'.format(level, time_took_to_finish), x = 300, y = 300, fontsize = 60)
+    message_display(text = 'Level {} : {} s'.format(level, time_took_to_finish), x = 400, y = 325, fontsize = 60)
     while True:
         events = pygame.event.get()
         lookfor_exit(events)
         if back_clicked(events):
-            Story.GameState.currentStage = 0
-            #app = main.App()
+            app.GameState.currentStage = 0
             startscreen_wait()
             app.on_execute()
 
