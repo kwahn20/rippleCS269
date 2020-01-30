@@ -273,19 +273,24 @@ def howTo_wait():
         if back_clicked(events):
             return startscreen_wait()
 
-def gameover_wait():
+def gameover_wait(app):
     back_clicked = make_button_click_trigger(x_range = (19, 128), y_range = (21, 83))
     show_image(screen, gameover_background)
     pygame.mixer.music.stop()
     pygame.mixer.music.load('Sounds/lose noise.wav')
     pygame.mixer.music.set_volume(0.95)
     pygame.mixer.music.play()
+
+    time_took_to_finish = app.timer.display_time // 1000
+    level = Story.GameState.currentStage
+
+    message_display(text = 'Level {} : {} s'.format(level, time_took_to_finish), x = 300, y = 300, fontsize = 60)
     while True:
         events = pygame.event.get()
         lookfor_exit(events)
         if back_clicked(events):
             Story.GameState.currentStage = 0
-            app = main.App()
+            #app = main.App()
             startscreen_wait()
             app.on_execute()
 
