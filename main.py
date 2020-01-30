@@ -267,7 +267,7 @@ class App:
             for col in range(0, len(self.maze.maze[row])):
                 if self.maze.maze[row][col] == 6:
                     self.maze.maze[row][col] = 2
-                    self.guards.append(Guard(tileSize*row + tileSize/4, tileSize*col + tileSize/4, 10, col, row))
+                    self.guards.append(Guard(tileSize*row + tileSize/4, tileSize*col + tileSize/4, 5, col, row))
                 if self.maze.maze[row][col] == 3:
                     self.player = Player(tileSize*row, tileSize*col, 10, 3*tileSize/2)
 
@@ -375,7 +375,7 @@ class App:
             for col in range(0, len(self.maze.maze[row])):
                 if self.maze.maze[row][col] == 6:
                     self.maze.maze[row][col] = 2
-                    self.guards.append(Guard(50*row + 50/4, 50*col + 50/4, 1, col, row))
+                    self.guards.append(Guard(50*row + 50/4, 50*col + 50/4, 5, col, row))
                 if self.maze.maze[row][col] == 3:
                     self.player = Player(20*row, 20*col, 10, 30)
 
@@ -529,7 +529,7 @@ class App:
                     for col in range(0, len(self.maze.maze[row])):
                         if self.maze.maze[row][col] == 6:
                             self.maze.maze[row][col] = 2
-                            self.guards.append(Guard(self.maze.tileSize*row + self.maze.tileSize/4, self.maze.tileSize*col + self.maze.tileSize/4, 10, col, row))
+                            self.guards.append(Guard(self.maze.tileSize*row + self.maze.tileSize/4, self.maze.tileSize*col + self.maze.tileSize/4, 5, col, row))
                 self.GameState.user = M.username
                 self.GameState.saveGame()
                 self.on_execute()
