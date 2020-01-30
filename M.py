@@ -1,6 +1,7 @@
 import pygame
 import sys
 import sounds
+import os.path
 import time
 from pygame.locals import *
 import Story
@@ -86,6 +87,12 @@ class Background(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.left, self.rect.top = [0,0]
 
+def message_display(text, x, y, fontsize):
+    font = pygame.font.Font(None, fontsize)
+    text_surface = font.render(text, True, (255,255,255))
+    screen.blit(text_surface, (x, y))
+    pygame.display.flip()
+
 def show_image(screen, background_img):
     screen.fill((0,0,0))
     screen.blit(background_img.image, background_img.rect)
@@ -99,6 +106,9 @@ def lookfor_exit(events):
 def esc_pressed(app):
     startscreen_wait()
     app.on_execute()
+
+def get_highscores_from_app(app):
+    return app.GameState.getHighScores()
 
 # make a 'trigger' function for a button located in the given x and y range
 def make_button_click_trigger(x_range, y_range):
@@ -200,9 +210,45 @@ def outro2_wait():
             Story.GameState.currentStage = 0
             return startscreen_wait()
 
+# def format_highscores(highscores):
+
+def my_get_highscores():
+    gamestate = Story.GameState()
+    scores = gamestate.getHighScores()
+    list_of_scores = [
+        string
+            .replace('[', '')
+            .replace(']', '')
+            .replace('\'', '')
+            .replace('\n', '')
+            .split(', ')
+            for string in scores
+        ]
+    return list_of_scores + [[0, '', 0] for x in range(5)]
+
 def highscores_wait():
     back_clicked = make_button_click_trigger(x_range = (19, 128), y_range = (21, 83))
     show_image(screen, highscores_image)
+    if(os.path.exists('highScoreData.txt')):
+        test = my_get_highscores()
+        print(test)
+        hs1, hs2, hs3, hs4, hs5, *rest = my_get_highscores()
+        # display all the names and highscores
+        message_display(text = hs1[1], x = 253, y = 162, fontsize = 50)
+        if hs1[0] != 0: message_display(text = 'F{} : {}s'.format(hs1[0], hs1[2]), x = 677, y = 162, fontsize = 40)
+
+        message_display(text = hs2[1], x = 253, y = 230, fontsize = 50)
+        if hs2[0] != 0: message_display(text = 'F{} : {}s'.format(hs2[0], hs2[2]), x = 677, y = 230, fontsize = 40)
+
+        message_display(text = hs3[1], x = 253, y = 303, fontsize = 50)
+        if hs3[0] != 0: message_display(text = 'F{} : {}s'.format(hs3[0], hs3[2]), x = 677, y = 303, fontsize = 40)
+
+        message_display(text = hs4[1], x = 253, y = 380, fontsize = 50)
+        if hs4[0] != 0: message_display(text = 'F{} : {}s'.format(hs4[0], hs4[2]), x = 677, y = 380, fontsize = 40)
+
+        message_display(text = hs5[1], x = 253, y = 456, fontsize = 50)
+        if hs5[0] != 0: message_display(text = 'F{} : {}s'.format(hs5[0], hs5[2]), x = 677, y = 456, fontsize = 40)
+        
     while True:
         events = pygame.event.get()
         lookfor_exit(events)
