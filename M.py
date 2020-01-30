@@ -78,7 +78,7 @@ def credits_wait():
             show_image(screen, startscreen_background)
             return()
 
-def gameover_wait():
+def gameover_wait(app):
     back_clicked = make_button_click_trigger(x_range = (19, 128), y_range = (21, 83))
     show_image(screen, gameover_background)
     while True:
@@ -87,6 +87,7 @@ def gameover_wait():
         if keys[K_ESCAPE]: sys.exit()
         if back_clicked(events):
             startscreen_wait()
+            app.on_execute()
 
 screen = pygame.display.set_mode(size = (1000, 563))
 

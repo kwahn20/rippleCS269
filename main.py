@@ -494,7 +494,7 @@ class App:
 
                 collisionRect = pygame.Rect(guard.x - width/2, guard.y - height/2, width, height)
                 if collisionRect.colliderect(self.player.rect):
-                    M.gameover_wait()
+                    M.gameover_wait(self)
 
                 self.pingAudioLines(guard.x - width/2, guard.y - height/2, (255,0,0))
                 foundPlayer = self.searchForPlayer(guard.x, guard.y, self.player.x, self.player.y)
