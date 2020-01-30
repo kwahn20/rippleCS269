@@ -109,7 +109,7 @@ def startscreen_wait():
     show_image(screen, startscreen_background)
 
     while True:
-        print(pygame.mouse.get_pos())
+        #print(pygame.mouse.get_pos())
         events = pygame.event.get()
         keys = pygame.key.get_pressed()
         if keys[K_ESCAPE]: sys.exit()
@@ -227,7 +227,6 @@ def pause_wait():
     main_clicked = make_button_click_trigger(x_range = (540, 926), y_range = (390, 495))
     show_image(screen, pause_background)
     while True:
-        print (pygame.mouse.get_pos())
         events = pygame.event.get()
         keys = pygame.key.get_pressed()
         if keys[K_ESCAPE]: sys.exit()

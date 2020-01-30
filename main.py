@@ -261,9 +261,9 @@ class App:
         tileSize = 60/3
         self.pause = False
         self.stage5 = Story.Stage5()
-        print(len(self.stage5.maze))
-        for line in self.stage5.maze:
-            print(len(line))
+        #print(len(self.stage5.maze))
+        # for line in self.stage5.maze:
+        #     print(len(line))
         self.maze = Maze(tileSize, self.maze1)
         self.unitcircle = []
 
@@ -527,7 +527,7 @@ class App:
             if (keys[K_p]):
                 M.pause_wait()
 
-        
+
             coords = self.maze.getTileCoords(self.player.y, self.player.x)
 
             if self.maze.maze[coords[0]][coords[1]] == 7:
