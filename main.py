@@ -253,13 +253,13 @@ class App:
         #              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
         self.maze1 = Story.Stage1().maze
 
-
         self._running = True
         self.windowWidth = 1000
         self.windowHeight = 563
         # self.windowWidth = 1920
         # self.windowHeight = 1080
         tileSize = 60/3
+        self.pause = False
         self.stage5 = Story.Stage5()
         print(len(self.stage5.maze))
         for line in self.stage5.maze:
@@ -367,13 +367,13 @@ class App:
 
         # self.screen.blit(pygame.transform.scale(self.background, (self.background.get_width()*2, self.background.get_height()*2)), (-self.player.x + self.window[0]/2, -self.player.y + self.window[1]/2))
         self.screen.blit(self.background, (-self.player.x + self.window[0]/2, -self.player.y + self.window[1]/2))
-        
+
         # FOR DISPLAYING AND UPDATING THE TIMER
         self.timer.update(pygame.time.get_ticks())
         self.screen.blit(self.timer.image, self.timer.rect)
         self.background.blit(self.timer.image, self.timer.rect)
         self.fog_of_war.blit(self.timer.image, self.timer.rect)
-        
+
         pygame.display.flip()
 
     def on_cleanup(self):
@@ -523,6 +523,11 @@ class App:
                     self.newChase = False
                     self.player.toggleChase()
 
+
+            if (keys[K_p]):
+                M.pause_wait()
+
+        
             coords = self.maze.getTileCoords(self.player.y, self.player.x)
 
             if self.maze.maze[coords[0]][coords[1]] == 7:

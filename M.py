@@ -13,6 +13,7 @@ CREDITS = 'images/Credits.png'
 GAMEOVER = 'images/GameOver.png'
 HOWTO = 'images/HowTo-2.png'
 username = ""
+PAUSE = "images/GamePause.png"
 
 # some janky code for a Timer object from michael coyne's incredible freshman year project
 class Timer(object):
@@ -60,7 +61,7 @@ class Timer(object):
         self.translate() # transforms display_time into readable display_text
         self.image = self._font.render(self.display_text, 0, (255,255,255)) #creates a surface object with desired text
 
-    def translate(self): 
+    def translate(self):
         '''translate milisecond time to a readable stopwatch-esque time (ex: 2:30, which means 2 mins 30 seconds)'''
         time_in_seconds = self.display_time // 1000 # calculate the time in seconds
         time_in_minutes = str(time_in_seconds // 60) # the minutes to display on the clock
@@ -220,6 +221,25 @@ def gameover_wait():
             startscreen_wait()
             app.on_execute()
 
+
+def pause_wait():
+    continue_clicked = make_button_click_trigger(x_range = (95, 479), y_range = (390, 495))
+    main_clicked = make_button_click_trigger(x_range = (540, 926), y_range = (390, 495))
+    show_image(screen, pause_background)
+    while True:
+        print (pygame.mouse.get_pos())
+        events = pygame.event.get()
+        keys = pygame.key.get_pressed()
+        if keys[K_ESCAPE]: sys.exit()
+        if main_clicked(events):
+            Story.GameState.currentStage = 0
+            app = main.App()
+            startscreen_wait()
+            app.on_execute()
+        if continue_clicked(events):
+            return()
+
+
 screen = pygame.display.set_mode(size = (1000, 563))
 
 startscreen_background = Background(START_SCREEN)
@@ -227,6 +247,8 @@ highscores_image = Background(HIGHSCORES)
 credits_background = Background(CREDITS)
 gameover_background = Background(GAMEOVER)
 howTo_background = Background(HOWTO)
+pause_background = Background(PAUSE)
+
 
 if(__name__ == '__main__'):
     pass
