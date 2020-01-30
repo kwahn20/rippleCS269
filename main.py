@@ -5,6 +5,7 @@ import math
 import sounds
 import astar
 import Story
+import sys
 
 # image needs to be 30 by 30
 
@@ -286,10 +287,6 @@ class App:
 
         self._running = True
 
-    def on_event(self, event):
-        if event.type == QUIT:
-            self._running = False
-
     def on_loop(self):
         pass
 
@@ -391,7 +388,11 @@ class App:
         self.newChase = False
 
         while( self._running ):
-            pygame.event.pump()
+            events = pygame.event.get()
+            for event in events:
+                if event.type == pygame.QUIT:
+                    sys.exit()
+
             keys = pygame.key.get_pressed()
             self.maze.litWalls = []
 
@@ -536,6 +537,7 @@ class App:
 
             if (keys[K_ESCAPE]):
                 self._running = False
+                M.esc_pressed(self)
             self.on_loop()
             self.on_render()
         self.on_cleanup()
