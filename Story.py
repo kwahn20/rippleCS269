@@ -133,10 +133,10 @@ class Stage3:
                      [1, 1, 1, 9, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1],
                      [1, 1, 1, 9, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1],
                      [1, 1, 1, 9, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 9, 9, 9, 9, 9, 9, 2, 9, 9, 9, 9, 9, 9, 9, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1],
-                     [1, 1, 1, 9, 0, 9, 9, 9, 9, 9, 9, 9, 9, 2, 9, 9, 9, 9, 1, 1, 1, 1, 1, 1, 9, 2, 9, 1, 1, 1, 1, 1, 1, 9, 9, 9, 9, 0, 0, 0, 0, 0, 0, 0, 9, 9, 9, 4],
-                     [1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 9, 2, 9, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 9, 4],
+                     [1, 1, 1, 9, 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 1, 1, 1, 1, 1, 1, 9, 2, 9, 1, 1, 1, 1, 1, 1, 9, 9, 9, 9, 0, 0, 0, 0, 0, 0, 0, 9, 9, 9, 4],
+                     [1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 9, 2, 9, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 9, 4],
                      [1, 1, 1, 9, 0, 9, 9, 9, 9, 9, 9, 9, 9, 2, 9, 9, 9, 9, 1, 1, 1, 1, 1, 1, 9, 2, 9, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 9, 9, 4],
-                     [1, 1, 1, 9, 0, 9, 1, 1, 1, 1, 1, 1, 9, 2, 9, 1, 1, 1, 9, 9, 9, 9, 9, 9, 9, 2, 9, 9, 9, 9, 9, 9, 9, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1],
+                     [1, 1, 1, 9, 0, 9, 1, 1, 1, 1, 1, 1, 9, 6, 9, 1, 1, 1, 9, 9, 9, 9, 9, 9, 9, 2, 9, 9, 9, 9, 9, 9, 9, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1],
                      [1, 1, 1, 9, 0, 9, 1, 1, 1, 1, 1, 1, 9, 2, 9, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1],
                      [1, 1, 1, 9, 9, 9, 1, 1, 1, 1, 1, 1, 9, 2, 9, 1, 1, 1, 9, 9, 9, 9, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1],
                      [1, 1, 1, 1, 1, 1, 9, 9, 9, 9, 9, 9, 9, 2, 9, 9, 9, 9, 1, 1, 1, 9, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1],
@@ -156,7 +156,7 @@ class Stage3:
                      [9, 7, 9, 9, 9, 9, 9, 9, 9, 1, 1, 1, 9, 2, 0, 0, 0, 9, 1, 1, 1, 9, 0, 9, 1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                      [1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 9, 9, 9, 2, 0, 0, 0, 9, 1, 1, 1, 9, 0, 9, 9, 9, 9, 9, 0, 0, 0, 0, 9, 9, 9, 9, 9, 9, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                      [1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0, 0, 0, 2, 0, 0, 0, 9, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                     [1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0, 9, 9, 2, 9, 9, 0, 9, 1, 1, 1, 9, 9, 9, 9, 0, 0, 0, 0, 0, 0, 0, 9, 9, 9, 9, 9, 2, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                     [1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 0, 9, 9, 9, 9, 9, 0, 9, 1, 1, 1, 9, 9, 9, 9, 0, 0, 0, 0, 0, 0, 0, 9, 9, 9, 9, 9, 2, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                      [1, 1, 1, 9, 9, 9, 9, 9, 9, 9, 0, 9, 1, 1, 1, 9, 0, 9, 9, 9, 9, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 9, 2, 9, 9, 9, 9, 1, 1, 1, 1, 1, 1],
                      [1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 9, 0, 0, 0, 0, 9, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 9, 2, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1],
                      [1, 1, 1, 9, 0, 0, 0, 0, 9, 9, 9, 9, 1, 1, 1, 9, 9, 9, 9, 9, 9, 1, 1, 1, 9, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 9, 2, 0, 0, 0, 9, 1, 1, 1, 1, 1, 1],
@@ -602,29 +602,42 @@ class GameState:
         self.currentStage = 0
         self.user = ""
         self.stageList = [Stage1(), Stage2(), Stage3(), Stage4(), Stage5(), Stage6(), Stage7(), Stage8(), Stage9(), Stage10()]
+
     def nextLevel(self):
         self.currentStage += 1
         if self.currentStage == 10:
             return M.outro1_wait()
         return self.stageList[self.currentStage]
+
     def saveGame(self):
-        self.file = open("saveData.txt", "r")
-        for line in self.file.readlines():
-            print(line)
-            if self.user in line[1]:
-                pass
-            else:
-                self.file.close()
-                self.file = open("saveData.txt", "a")
-                self.saveInfo = [self.currentStage, self.user]
-                self.file.write(str(self.saveInfo)+"\n")
+        self.old = []
+        try:
+            self.file = open("saveData.txt", "r")
+            for line in self.file.readlines():
+                if str(line).find(self.user):
+                    pass
+                else:
+                    self.old.append(line)
+            self.file.close()
+        except IOError:
+            self.file = open("saveData.txt","w")
+            self.file.close()
+
+        self.file = open("saveData.txt", "w")
+        self.saveInfo = [self.currentStage, self.user]
+        if len(self.old) == 0:
+            self.old = ""
+        self.file.write(str(self.old) + str(self.saveInfo)+"\n")
         self.file.close()
+
+
     def loadGame(self, saveFileNum):
         self.file = open("saveData.txt", "r")
         self.loadInfo = self.file.read(saveFileNum)
         self.currentStage = int(self.loadInfo.split(",")[0])
         self.user = self.loadInfo.split(",")[1]
         self.file.close()
+
     def createHighScore(self, time):
         self.file = open("highScoreData.txt", "r")
         self.highScores = self.file.readlines()
@@ -638,6 +651,7 @@ class GameState:
         open("highScoreData.txt", "w").close()
         self.file = open("highScoreData.txt", "w")
         self.file.writelines(self.highScores)
+
     def getHighScores(self):
         self.file = open("highScoreData.txt", "r")
         return self.file.readlines()[0:4]
