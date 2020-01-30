@@ -97,8 +97,8 @@ def make_button_click_trigger(x_range, y_range):
 def startscreen_wait():
     new_game_clicked    = make_button_click_trigger(x_range = (190, 312), y_range = (380, 430))
     high_scores_clicked = make_button_click_trigger(x_range = (442, 570), y_range = (380, 430))
-    credits_clicked     = make_button_click_trigger(x_range = (573, 813), y_range = (380, 430))
-    howTo_clicked       = make_button_click_trigger(x_range = (800, 915), y_range = (380, 430))
+    credits_clicked     = make_button_click_trigger(x_range = (690, 813), y_range = (380, 430))
+    howTo_clicked       = make_button_click_trigger(x_range = (573, 685), y_range = (380, 430))
     # load the music for the start screen and play on loop
     pygame.mixer.music.stop()
     pygame.mixer.music.load('track1.wav')
@@ -203,7 +203,7 @@ def howTo_wait():
         keys = pygame.key.get_pressed()
         if keys[K_ESCAPE]: sys.exit()
         if back_clicked(events):
-            show_image(screen, howTo_background)
+            show_image(screen, startscreen_background)
             return()
 
 def gameover_wait():

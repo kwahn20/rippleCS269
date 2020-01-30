@@ -172,6 +172,8 @@ class Maze:
     def draw(self, background):
         for i in range(0, len(self.walls)):
             pygame.draw.rect(background, (0, 128, 255), self.walls[i])
+            if self.walls[i] == 7:
+                pygame.draw.rect(background, (0, 255, 0), self.walls[i])
 
 class App:
     def collision(self, player, walls):
@@ -278,6 +280,8 @@ class App:
                     self.guards.append(Guard(tileSize*row + tileSize/4, tileSize*col + tileSize/4, 10, col, row))
                 if self.maze.maze[row][col] == 3:
                     self.player = Player(tileSize*row, tileSize*col, 10, 3*tileSize/2)
+
+
 
     def on_init(self):
         pygame.init()
