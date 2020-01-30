@@ -50,6 +50,13 @@ class Timer(object):
     def display_time(self, new_time):
         self._display_time = new_time
 
+    def pause(self):
+        self.pausedtime = self.display_time
+    
+    def resume(self):
+        self.reset()
+        self.displaytime += self.pausedtime
+        
     def reset(self, new_initial_time):
         '''reset the timer'''
         self.initial_time = new_initial_time
