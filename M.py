@@ -52,7 +52,7 @@ class Timer(object):
 
     def pause(self):
         self.pausedtime = self.display_time
-    
+
     def resume(self):
         self.reset()
         self.displaytime += self.pausedtime
@@ -198,7 +198,7 @@ def outro2_wait():
         lookfor_exit(events)
         if continue_clicked(events):
             Story.GameState.currentStage = 0
-            return startscreen_wait()
+            return credits_wait()
 
 def highscores_wait():
     back_clicked = make_button_click_trigger(x_range = (19, 128), y_range = (21, 83))
