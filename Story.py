@@ -610,9 +610,9 @@ class GameState:
         return self.stageList[self.currentStage]
 
     def saveGame(self):
+        self.old = []
         try:
             self.file = open("saveData.txt", "r")
-            self.old = []
             for line in self.file.readlines():
                 if str(line).find(self.user):
                     pass
@@ -621,12 +621,6 @@ class GameState:
             self.file.close()
         except IOError:
             self.file = open("saveData.txt","w")
-            self.old = []
-            for line in self.file.readlines():
-                if str(line).find(self.user):
-                    pass
-                else:
-                    self.old.append(line)
             self.file.close()
 
         self.file = open("saveData.txt", "w")
